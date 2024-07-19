@@ -4,10 +4,11 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import MenuIcon from '@mui/icons-material/Menu';
 import { css } from '@emotion/react';
 import vars from '@/assets/style/modules/vars';
-import Menu from '@/components/ChatList/Menu';
+import Menu from '@/components/ChatsList/Menu';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-export default function ChatListSidebat() {
+export default function Sidebar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const menuToggle = v => () => {
@@ -20,12 +21,16 @@ export default function ChatListSidebat() {
       <Button style={Icon} onClick={menuToggle(true)}>
         <MenuIcon />
       </Button>
-      <Button style={Icon}>
-        <ThreePIcon />
-      </Button>
-      <Button>
-        <GroupsIcon />
-      </Button>
+      <Link to={`/`}>
+        <Button style={Icon}>
+          <ThreePIcon />
+        </Button>
+      </Link>
+      <Link to={`/friends`}>
+        <Button>
+          <GroupsIcon />
+        </Button>
+      </Link>
     </Aside>
   );
 }

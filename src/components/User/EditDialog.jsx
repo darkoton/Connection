@@ -74,7 +74,7 @@ export default function EditModal({ open, onClose }) {
       <DialogContentStyled sx={{ overflow: 'visible' }}>
         <UploadAvatar>
           <UploadLabel htmlFor="avatar">
-            <Avatar src={userForm.photoURL} sx={{ width: 80, height: 80 }} />
+            <Avatar src={userForm.photoURL} size={80} />
             <UploadIconStyled />
           </UploadLabel>
           <InputFile

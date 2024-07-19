@@ -1,11 +1,28 @@
 import styled from '@emotion/styled';
-import avatarImg from '@/assets/img/avatar.png';
-import Avatar from '@mui/material/Avatar';
+import Avatar from '@/components/User/Avatar';
 import * as mixins from '@/assets/style/modules/mixins.js';
 import vars from '@/assets/style/modules/vars.js';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { ListItem } from '@mui/material';
 
+export default function ChatItem() {
+  return (
+    <Body>
+      <AvatarStyled size={60} alt="Travis Howard" />
+
+      <Info>
+        <Left>
+          <Username>Username</Username>
+          <Message>Message</Message>
+        </Left>
+        <Right>
+          <Time>13:32</Time>
+          <Check />
+        </Right>
+      </Info>
+    </Body>
+  );
+}
 const Body = styled(ListItem)`
   display: flex;
   align-items: center;
@@ -61,22 +78,3 @@ const Check = styled(DoneAllIcon)`
   ${mixins.adaptivValue('font-size', 22, 18, 1)}
   color:${vars.$colorMain}
 `;
-
-export default function ChatListItem() {
-  return (
-    <Body>
-      <AvatarStyled alt="Travis Howard" src={avatarImg} />
-
-      <Info>
-        <Left>
-          <Username>Username</Username>
-          <Message>Message</Message>
-        </Left>
-        <Right>
-          <Time>13:32</Time>
-          <Check />
-        </Right>
-      </Info>
-    </Body>
-  );
-}

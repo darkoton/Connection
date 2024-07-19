@@ -1,8 +1,8 @@
-import ChatList from '@/components/ChatList/List';
 import UserSideBar from '@/components/UserSideBar';
 import Chat from '@/components/Chat/Chat';
 import useUserStore from '@/stores/user.js';
 import Loading from '@/components/Loading';
+import { Outlet } from 'react-router-dom';
 
 export default function Main() {
   const { user } = useUserStore();
@@ -10,8 +10,7 @@ export default function Main() {
     <>
       {user ? (
         <div className="app">
-          <div></div>
-          <ChatList />
+          <Outlet />
           <Chat />
           <UserSideBar />
         </div>

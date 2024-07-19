@@ -1,18 +1,19 @@
 import styled from '@emotion/styled';
 import vars from '@/assets/style/modules/vars';
-import Header from '@/components/ChatList/Header';
+import Header from '@/components/ChatsList/Header';
 import { List } from '@mui/material';
-import ChatListItem from '@/components/ChatList/Item';
-import Sidebar from '@/components/ChatList/Sidebar';
+import ChatsListItem from '@/components/ChatsList/Item';
+import Sidebar from '@/components/ChatsList/Sidebar';
 
-export default function ChatList() {
+export default function Chats() {
   return (
     <Aside>
       <Sidebar />
+
       <Body>
         <Header />
         <ListStyled>
-          <ChatListItem />
+          <ChatsListItem />
         </ListStyled>
       </Body>
     </Aside>

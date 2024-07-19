@@ -1,13 +1,27 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import Main from '@/routes/main';
+import Home from '@/routes/home';
 import ErrorPage from '@/routes/error';
 import Auth from '@/routes/auth';
+import ChatsList from '@/components/ChatsList/List';
+import Friends from '@/components/ChatsList/Friends';
+
 const routes = [
   {
     path: '/',
-    element: <Main />,
+    element: <Home />,
+    children: [
+      {
+        path: '/',
+        element: <ChatsList />,
+      },
+      {
+        path: '/friends',
+        element: <Friends />,
+      },
+    ],
   },
+
   {
     path: 'authentication',
     element: <Auth />,
