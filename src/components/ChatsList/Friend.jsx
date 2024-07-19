@@ -9,23 +9,25 @@ import vars from '@/assets/style/modules/vars.js';
 
 Friend.propTypes = {
   invite: propTypes.bool,
+  user: propTypes.object,
+  onAccept: propTypes.func,
+  onReject: propTypes.func,
 };
 
-export default function Friend({ invite }) {
-  console.log(invite);
+export default function Friend({ invite, user, onAccept, onReject }) {
   return (
     <FriendStyled>
       <Left>
-        <Avatar />
-        <Username>Username</Username>
+        <Avatar user={user} />
+        <Username>{user.displayName}</Username>
       </Left>
 
       {invite && (
         <Invite>
-          <Accept>
+          <Accept onClick={onAccept}>
             <CheckIcon sx={Icon} />
           </Accept>
-          <Reject>
+          <Reject onClick={onReject}>
             <ClearIcon sx={Icon} />
           </Reject>
         </Invite>
@@ -47,6 +49,9 @@ const Left = styled.div`
 
 const Username = styled.span`
   font-size: 20px;
+  /* white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; */
 `;
 
 const Invite = styled.div`

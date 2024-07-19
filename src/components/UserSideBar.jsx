@@ -3,8 +3,7 @@ import { css } from '@emotion/react';
 import vars from '@/assets/style/modules/vars.js';
 import * as mixins from '@/assets/style/modules/mixins.js';
 import CloseIcon from '@mui/icons-material/Close';
-import avatar from '@/assets/img/avatar.png';
-import { Avatar } from '@mui/material';
+import Avatar from '@/components/User/Avatar';
 import { List, ListItem } from '@mui/material';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import BackHandOutlinedIcon from '@mui/icons-material/BackHandOutlined';
@@ -17,7 +16,7 @@ export default function UserSideBar() {
         <Close />
       </Header>
       <User>
-        <AvatarStyled src={avatar} />
+        <Avatar current size={70} />
         <UserInfo>
           <Username>Username</Username>
           <Status>Is only</Status>
@@ -86,13 +85,6 @@ const User = styled.div`
   ${mixins.adaptivIndent('padding', 15, 7.5, 0, 0, 1)}
   border-bottom: 9px solid #3151A3;
   ${mixins.adaptivValue('border-bottom-width', 9, 3, 1)}
-`;
-
-const AvatarStyled = styled(Avatar)`
-  width: 100%;
-  height: 100%;
-  max-width: 70px;
-  object-fit: cover;
 `;
 
 const UserInfo = styled.div`

@@ -38,6 +38,6 @@ export async function deleteFile(path) {
     const fileRef = ref(storage, path.join('/'));
     await deleteObject(fileRef);
   } catch (error) {
-    console.error(error);
+    return { type: 'error', error: error };
   }
 }

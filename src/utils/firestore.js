@@ -27,23 +27,25 @@ export async function setData(collectionName, id, body) {
 export async function addData(collectionName, body) {
   try {
     const docRef = await addDoc(collection(db, collectionName), body);
-    console.log('Document written with ID: ', docRef.id);
     return docRef;
   } catch (e) {
     console.error('Error adding document: ', e);
   }
 }
 
-export async function getDatas(path, wheres) {
+export async function getDatas(path, wheres, options = {}) {
   try {
     const wheresList = getWheres(wheres);
     const q = query(collection(db, ...path), ...wheresList);
     const querySnapshot = await getDocs(q);
-    // querySnapshot.forEach(doc => {
-    //   console.log(`${doc.id} => ${doc.data()}`);
-    // });
+    if (options.getDoc) {
+      return querySnapshot.docs;
+    }
 
-    return querySnapshot;
+    const result = querySnapshot.docs.map(doc => {
+      return doc.data();
+    });
+    return result;
   } catch (error) {
     console.error(error);
   }
@@ -60,7 +62,7 @@ export async function getData(path) {
 
 export async function updateData(path, updateBody, wheres) {
   if (wheres) {
-    const datas = await getDatas(path, wheres);
+    const datas = await getDatas(path, wheres, true);
 
     datas.forEach(async data => {
       await updateDoc(data.ref, updateBody);

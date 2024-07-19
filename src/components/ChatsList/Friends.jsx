@@ -11,32 +11,46 @@ import Friend from '@/components/ChatsList/Friend';
 import Sidebar from '@/components/ChatsList/Sidebar';
 import Divider from '@/components/ui/Divider';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import useUserStore from '@/stores/user.js';
+import { useEffect, useState } from 'react';
+import { getDatas } from '@/utils/firestore.js';
 
 export default function Friends() {
+  const { user } = useUserStore();
+  const [invitations, setInvitions] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      setInvitions(
+        await getDatas(['users'], [['uid', 'in', user.invitations]]),
+      );
+    }
+
+    if (user.invitations.length) {
+      fetchData();
+    }
+  }, [user.invitations]);
   return (
     <Aside>
       <Sidebar />
       <Body>
         <Header />
         <AccordionStyled>
-          <AccordionSummaryStyled
-            expandIcon={<Icon />}
-            aria-controls="panel1d-content"
-            id="panel1d-header"
-          >
-            friend invitations (0)
+          <AccordionSummaryStyled expandIcon={<Icon />}>
+            friend invitations ({user.invitations.length})
           </AccordionSummaryStyled>
           <AccordionDetailsStyled>
             <ListStyled>
-              <Friend invite />
+              {invitations.map(user => (
+                <Friend invite key={user.uid} user={user} />
+              ))}
             </ListStyled>
           </AccordionDetailsStyled>
         </AccordionStyled>
 
         <Divider size={3} />
-        <ListStyled>
+        {/* <ListStyled>
           <Friend />
-        </ListStyled>
+        </ListStyled> */}
       </Body>
     </Aside>
   );

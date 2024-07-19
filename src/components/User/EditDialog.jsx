@@ -22,23 +22,30 @@ export default function EditModal({ open, onClose }) {
   const { user, setUser } = useUserStore();
   const [userForm, setUserForm] = useState(user);
   const [avatarFile, setAvatarFile] = useState();
+  const [avatarDelete, setAvatarDelete] = useState(false);
 
   const setDisplayName = () => e =>
     setUserForm({ ...userForm, displayName: e.target.value });
 
   const setPhone = () => e =>
-    setUserForm({ ...userForm, phone: e.target.value });
+    setUserForm({ ...userForm, phoneNumber: e.target.value });
 
   const selectAvatar = e => {
     const file = e.target.files[0];
+    setAvatarDelete(false);
 
     if (!FileReader) {
       return;
     }
 
     if (!file) {
+      setAvatarDelete(true);
+      setAvatarFile(null);
+      setUserForm({ ...userForm, photoURL: null });
+
       return;
     }
+
     setAvatarFile(file);
 
     const fileReader = new FileReader();
@@ -53,12 +60,14 @@ export default function EditModal({ open, onClose }) {
   const confirm = async () => {
     const newUserData = userForm;
     if (avatarFile) {
+      await deleteFile([user.photoURL]);
       const [url] = await uploadFile(['avatars'], [avatarFile]);
       newUserData.photoURL = url;
+    } else if (avatarDelete) {
+      await deleteFile([user.photoURL]);
     }
 
     await updateData(['users', user.uid], newUserData);
-    await deleteFile([user.photoURL]);
     setUser(newUserData);
     onClose();
   };
@@ -94,7 +103,7 @@ export default function EditModal({ open, onClose }) {
         <Input
           id="phone"
           placeholder="Phone"
-          value={userForm.phone}
+          value={userForm.phoneNumber || ''}
           onChange={setPhone()}
         />
       </DialogContentStyled>
@@ -122,7 +131,7 @@ const UploadLabel = styled.label`
 const UploadAvatar = styled.div`
   position: relative;
 
-  img {
+  .avatar {
     transition: all 0.3s ease 0s;
   }
 
@@ -136,7 +145,7 @@ const UploadAvatar = styled.div`
         opacity: 1;
       }
 
-      & img {
+      & .avatar {
         filter: brightness(0.5);
       }
     }

@@ -70,7 +70,7 @@ const createTag = () => {
       );
     }
 
-    if ((await getDatas(['users'], [['tag', '==', result]])).docs.length) {
+    if ((await getDatas(['users'], [['tag', '==', result]])).length) {
       generate();
     }
   };
@@ -85,6 +85,7 @@ const createUser = info => {
     email: info.email,
     phoneNumber: info.phoneNumber,
     photoURL: info.photoURL,
+    invitations: [],
     chats: [],
     tag: createTag(),
     uid: info.uid,

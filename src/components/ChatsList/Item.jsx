@@ -8,7 +8,7 @@ import { ListItem } from '@mui/material';
 export default function ChatItem() {
   return (
     <Body>
-      <AvatarStyled size={60} alt="Travis Howard" />
+      <AvatarStyled size={60} current alt="Travis Howard" />
 
       <Info>
         <Left>

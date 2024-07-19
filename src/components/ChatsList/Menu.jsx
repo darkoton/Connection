@@ -51,7 +51,7 @@ export default function Menu({ open, toggle }) {
           {user && (
             <Profile>
               <Flex justifyBetween={true} itemsStart>
-                <AvatarStyled size={80} />
+                <AvatarStyled size={80} current />
                 <EditButton onClick={() => setEditOpen(true)} />
               </Flex>
               <Username>{user.displayName}</Username>
