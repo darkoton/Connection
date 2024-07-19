@@ -1,0 +1,63 @@
+//< " ФАЙЛ С ОБНУЛЯЮЩИМИ СТИЛЯМИ " >=============================================================================================================>//
+@import "./modules/_nullstyle";
+
+// TAILWIND //
+@import "./modules/_tailwind";
+
+//< " ПОДКЛЮЧАЕМ ФАЙЛ С ШРИФТАМИ " >=============================================================================================================>//
+@import "./modules/_fonts";
+
+//< " ПОДКЛЮЧАЕМ ФАЙЛ С ИКОНКАМИ " >=============================================================================================================>//
+// @import "./modules/_iconfonts";
+
+//< " ФАЙЛ С ОТДЕЛЬНЫМИ БЛОКАМИ " >=============================================================================================================>//
+// @import "./modules/_ui";
+
+body {
+  font-family: $fontRoboto;
+  color: $colorWhite;
+  font-size: 14px;
+  @include scrollbars(7px, #77b9aa, #497172, 6px);
+
+  // ._lock-scroll
+  &._lock-scroll {
+    overflow: hidden;
+  }
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  background-color: $colorBg;
+}
+
+//< " ОБОЛОЧКА " >=============================================================================================================>//
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+//< " СЕТКА " >=============================================================================================================>//
+
+// .content
+.content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.app {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+// ._container
+._container {
+  width: 100%;
+  padding: 0px #{calc($containerPadding / 2) + px} 0px #{calc($containerPadding / 2) + px};
+  margin: 0px auto;
+  max-width: $maxWidthContainer + px;
+}
