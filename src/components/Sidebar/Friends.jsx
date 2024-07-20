@@ -105,10 +105,11 @@ const AccordionSummaryStyled = styled(AccordionSummary)`
   &,
   &.Mui-expanded {
     min-height: auto;
+    /* margin: 5px 0; */
   }
 
   & div,
-  & .Mui-expanded {
+  & .MuiAccordionSummary-content.Mui-expanded {
     margin: 5px 0;
   }
 `;
