@@ -39,19 +39,21 @@ export default function Friend({ invite, user, onAccept, onReject }) {
 const FriendStyled = styled(ListItem)`
   display: flex;
   justify-content: space-between;
+  column-gap: 10px;
 `;
 
 const Left = styled.div`
   display: flex;
   column-gap: 10px;
   align-items: center;
+  overflow: hidden;
 `;
 
 const Username = styled.span`
   font-size: 20px;
-  /* white-space: nowrap;
+  white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden; */
+  overflow: hidden;
 `;
 
 const Invite = styled.div`

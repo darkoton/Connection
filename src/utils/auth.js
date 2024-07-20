@@ -89,6 +89,7 @@ const createUser = info => {
     chats: [],
     tag: createTag(),
     uid: info.uid,
+    friends: [],
   });
 };
 

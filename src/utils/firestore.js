@@ -51,8 +51,12 @@ export async function getDatas(path, wheres, options = {}) {
   }
 }
 
-export async function getData(path) {
+export async function getData(path, options = {}) {
   const querySnapshot = await getDoc(doc(db, ...path));
+
+  if (options.getDoc) {
+    return querySnapshot.docs;
+  }
   // querySnapshot.forEach(doc => {
   //   console.log(`${doc.id} => ${doc.data()}`);
   // });
@@ -62,8 +66,7 @@ export async function getData(path) {
 
 export async function updateData(path, updateBody, wheres) {
   if (wheres) {
-    const datas = await getDatas(path, wheres, true);
-
+    const datas = await getDatas(path, wheres, { getDoc: true });
     datas.forEach(async data => {
       await updateDoc(data.ref, updateBody);
     });
@@ -73,6 +76,7 @@ export async function updateData(path, updateBody, wheres) {
       message: 'Update is complete',
     };
   } else {
-    return updateDoc(doc(db, ...path), updateBody);
+    await updateDoc(doc(db, ...path), updateBody);
+    return await getData(path);
   }
 }

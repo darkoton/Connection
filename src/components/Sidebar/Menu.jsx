@@ -69,6 +69,7 @@ export default function Menu({ open, toggle }) {
 const BoxStyled = styled(Box)`
   width: 300px;
   padding: 10px 0;
+  overflow: hidden;
 `;
 
 const Profile = styled.div`
@@ -81,6 +82,9 @@ const Profile = styled.div`
 const Username = styled.span`
   color: #fff;
   font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Tag = styled.span`

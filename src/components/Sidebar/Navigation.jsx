@@ -4,11 +4,11 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import MenuIcon from '@mui/icons-material/Menu';
 import { css } from '@emotion/react';
 import vars from '@/assets/style/modules/vars';
-import Menu from '@/components/ChatsList/Menu';
+import Menu from '@/components/Sidebar/Menu';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Sidebar() {
+export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const menuToggle = v => () => {
