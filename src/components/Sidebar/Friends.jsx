@@ -15,30 +15,49 @@ import { arrayUnion, arrayRemove } from 'firebase/firestore';
 
 export default function Friends() {
   const { user, setUser } = useUserStore();
+  const [friends, setFriends] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [activeInviteAccordion, setActiveInviteAccordion] = useState(false);
+  const [activeFriendsAccordion, setActiveFriendsAccordion] = useState(false);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchInvitations() {
       setInvitations(
         await getDatas(['users'], [['uid', 'in', user.invitations]]),
       );
     }
 
-    if (user.invitations.length) {
-      fetchData();
+    async function fetchFriends() {
+      setFriends(await getDatas(['users'], [['uid', 'in', user.friends]]));
     }
-  }, [user.invitations]);
+
+    if (user.invitations.length) {
+      fetchInvitations();
+    }
+
+    if (user.friends.length) {
+      fetchFriends();
+    }
+  }, [user.invitations, user.friends]);
 
   useEffect(() => {
     setActiveInviteAccordion(
       localStorage.getItem('invitationsAccordion') == 'true' ? true : false,
     );
+
+    setActiveFriendsAccordion(
+      localStorage.getItem('friendsAccordion') == 'true' ? true : false,
+    );
   }, []);
 
-  function handleToggle(event, expanded) {
+  function handleToggleInvite(event, expanded) {
     setActiveInviteAccordion(expanded);
     localStorage.setItem('invitationsAccordion', expanded);
+  }
+
+  function handleToggleFriends(event, expanded) {
+    setActiveFriendsAccordion(expanded);
+    localStorage.setItem('friendsAccordion', expanded);
   }
 
   function accept(uid) {
@@ -69,7 +88,7 @@ export default function Friends() {
     <>
       <AccordionStyled
         expanded={!!(activeInviteAccordion && invitations.length)}
-        onChange={handleToggle}
+        onChange={handleToggleInvite}
       >
         <AccordionSummaryStyled expandIcon={!!invitations.length && <Icon />}>
           friend invitations ({user.invitations.length})
@@ -90,6 +109,23 @@ export default function Friends() {
       </AccordionStyled>
 
       <Divider size={3} />
+
+      {console.log(!!(activeFriendsAccordion && friends.length))}
+      <AccordionStyled
+        expanded={!!(activeFriendsAccordion && friends.length)}
+        onChange={handleToggleFriends}
+      >
+        <AccordionSummaryStyled expandIcon={!!friends.length && <Icon />}>
+          friend invitations ({user.friends.length})
+        </AccordionSummaryStyled>
+        <AccordionDetailsStyled>
+          <ListStyled>
+            {friends.map(friend => (
+              <Friend key={friend.uid} user={friend} />
+            ))}
+          </ListStyled>
+        </AccordionDetailsStyled>
+      </AccordionStyled>
       {/* <ListStyled>
           <Friend />
         </ListStyled> */}
@@ -99,6 +135,10 @@ export default function Friends() {
 
 const AccordionStyled = styled(Accordion)`
   background: transparent;
+  &,
+  &.Mui-expanded {
+    margin: 0;
+  }
 `;
 
 const AccordionSummaryStyled = styled(AccordionSummary)`
@@ -107,8 +147,7 @@ const AccordionSummaryStyled = styled(AccordionSummary)`
     min-height: auto;
     /* margin: 5px 0; */
   }
-
-  & div,
+  & .MuiAccordionSummary-content,
   & .MuiAccordionSummary-content.Mui-expanded {
     margin: 5px 0;
   }
