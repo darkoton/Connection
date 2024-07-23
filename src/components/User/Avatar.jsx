@@ -49,7 +49,6 @@ export default function UserAvatar({ user, current, size = 60, ...props }) {
   return (
     <>
       <Avatar
-        className="avatar"
         src={
           (user && user.photoURL) ||
           (current && currentUser && currentUser.photoURL)

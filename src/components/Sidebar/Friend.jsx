@@ -14,9 +14,9 @@ Friend.propTypes = {
   onReject: propTypes.func,
 };
 
-export default function Friend({ invite, user, onAccept, onReject }) {
+export default function Friend({ invite, user, onAccept, onReject, ...props }) {
   return (
-    <FriendStyled>
+    <FriendStyled invite={invite} {...props}>
       <Left>
         <Avatar user={user} />
         <Username>{user.displayName}</Username>
@@ -40,6 +40,17 @@ const FriendStyled = styled(ListItem)`
   display: flex;
   justify-content: space-between;
   column-gap: 10px;
+  ${({ invite }) =>
+    !invite &&
+    `@media (any-hover:hover){
+  &{
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+  }
+  &:hover{
+    background:#293248;
+  }
+  }`}
 `;
 
 const Left = styled.div`

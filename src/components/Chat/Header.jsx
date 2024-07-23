@@ -3,15 +3,27 @@ import styled from '@emotion/styled';
 import vars from '@/assets/style/modules/vars.js';
 import * as mixins from '@/assets/style/modules/mixins.js';
 import StartOutlinedIcon from '@mui/icons-material/StartOutlined';
+import Avatar from '@/components/User/Avatar';
+import useChatStore from '@/stores/chat';
+import useUiStore from '@/stores/ui';
+
 export default function Header() {
+  const { user } = useChatStore();
+  const { userSidebar, setUserSidebar } = useUiStore();
   return (
     <Body>
       <User>
-        <Username>Username</Username>
-        <Status>is only</Status>
+        <Avatar size={60} user={user} />
+        <Info>
+          <Username>{user.displayName}</Username>
+          <Status>is only</Status>
+        </Info>
       </User>
 
-      <Icon />
+      <Icon
+        onClick={() => setUserSidebar(!userSidebar)}
+        sx={{ transform: !userSidebar && 'scaleX(-1)' }}
+      />
     </Body>
   );
 }
@@ -25,6 +37,12 @@ const Body = styled.div`
 `;
 
 const User = styled.div`
+  display: flex;
+  column-gap: 20px;
+  align-items: center;
+`;
+
+const Info = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -48,7 +66,7 @@ const Icon = styled(StartOutlinedIcon)`
   @media (any-hover:hover) {
     & {
       cursor: pointer;
-      transition: all 0.3s ease 0s;
+      transition: color 0.3s ease 0s;
     }
     &:hover {
       color: ${vars.$colorMain};

@@ -5,7 +5,6 @@ import router from '@/router/index';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import '@/assets/style/main.scss';
-
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',

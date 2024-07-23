@@ -9,42 +9,87 @@ import {
   query,
   where,
   updateDoc,
+  or,
+  onSnapshot,
 } from 'firebase/firestore';
 import app from './firebase.js';
 
 const db = getFirestore(app);
 
-const getWheres = wheres => wheres.map(w => where(...w));
+const getWheres = (wheres = []) => {
+  if (!wheres) {
+    return [];
+  }
 
-export async function setData(collectionName, id, body) {
+  return wheres.map(w => {
+    return where(...w);
+  });
+};
+
+const getOrs = (ors = []) => {
+  if (!ors) {
+    return [];
+  }
+
+  const result = ors.map(o => {
+    return or(...getWheres(o.wheres), ...getOrs(o.ors));
+  });
+  return result;
+};
+
+const getOther = other => {
+  if (!other) {
+    return [];
+  }
+  return other;
+};
+
+const getQuery = (path, queries) => {
+  if (!path.length % 2) {
+    return query(
+      doc(db, ...path),
+      ...getWheres(queries.wheres),
+      ...getOrs(queries.ors),
+      ...getOther(queries.other),
+    );
+  }
+
+  return query(
+    collection(db, ...path),
+    ...getWheres(queries.wheres),
+    ...getOrs(queries.ors),
+    ...getOther(queries.other),
+  );
+};
+
+export async function setData(path, body) {
   try {
-    await setDoc(doc(db, collectionName, id), body);
+    await setDoc(doc(db, ...path), body);
   } catch (e) {
     console.error('Error adding document: ', e);
   }
 }
 
-export async function addData(collectionName, body) {
+export async function addData(path, body) {
   try {
-    const docRef = await addDoc(collection(db, collectionName), body);
+    const docRef = await addDoc(collection(db, ...path), body);
     return docRef;
   } catch (e) {
     console.error('Error adding document: ', e);
   }
 }
 
-export async function getDatas(path, wheres, options = {}) {
+export async function getDatas(path, queries, options = {}) {
   try {
-    const wheresList = getWheres(wheres);
-    const q = query(collection(db, ...path), ...wheresList);
+    const q = getQuery(path, queries);
     const querySnapshot = await getDocs(q);
     if (options.getDoc) {
       return querySnapshot.docs;
     }
-
     const result = querySnapshot.docs.map(doc => {
       return doc.data();
     });
+
     return result;
   } catch (error) {
     console.error(error);
@@ -79,4 +124,12 @@ export async function updateData(path, updateBody, wheres) {
     await updateDoc(doc(db, ...path), updateBody);
     return await getData(path);
   }
+}
+
+export function watchData(path, callback, queries) {
+  let reqQuery = getQuery(path, queries);
+
+  return onSnapshot(reqQuery, snapshot => {
+    callback(snapshot);
+  });
 }

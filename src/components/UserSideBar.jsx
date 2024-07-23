@@ -7,18 +7,22 @@ import Avatar from '@/components/User/Avatar';
 import { List, ListItem } from '@mui/material';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import BackHandOutlinedIcon from '@mui/icons-material/BackHandOutlined';
+import useChatStore from '@/stores/chat.js';
+import useUiStore from '@/stores/ui.js';
 
 export default function UserSideBar() {
+  const { user } = useChatStore();
+  const { setUserSidebar } = useUiStore();
   return (
     <Aside>
       <Header>
         <Title>Information</Title>
-        <Close />
+        <Close onClick={() => setUserSidebar(false)} />
       </Header>
       <User>
-        <Avatar current size={70} />
+        <Avatar current size={70} user={user} />
         <UserInfo>
-          <Username>Username</Username>
+          <Username>{user.displayName}</Username>
           <Status>Is only</Status>
         </UserInfo>
       </User>
@@ -90,11 +94,16 @@ const User = styled.div`
 const UserInfo = styled.div`
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   row-gap: 1px;
 `;
 
 const Username = styled.span`
   ${mixins.adaptivValue('font-size', 18, 16, 1)}
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const Status = styled.span`

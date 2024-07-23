@@ -53,7 +53,6 @@ export function scrollbars(
   &::-webkit-scrollbar-track {
     background: ${$backgroundColor};
   }
-
   // Standard version (Firefox only for now)
   @-moz-document url-prefix() {
     scrollbar-color: ${$foregroundColor} ${$backgroundColor};

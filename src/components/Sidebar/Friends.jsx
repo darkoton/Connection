@@ -9,12 +9,14 @@ import Friend from '@/components/Sidebar/Friend';
 import Divider from '@/components/ui/Divider';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useUserStore from '@/stores/user.js';
+import useChatStore from '@/stores/chat.js';
 import { useEffect, useState } from 'react';
 import { getDatas, updateData } from '@/utils/firestore.js';
 import { arrayUnion, arrayRemove } from 'firebase/firestore';
 
 export default function Friends() {
   const { user, setUser } = useUserStore();
+  const { setUser: setChatUser, setChat, chat: chatData } = useChatStore();
   const [friends, setFriends] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [activeInviteAccordion, setActiveInviteAccordion] = useState(false);
@@ -23,12 +25,16 @@ export default function Friends() {
   useEffect(() => {
     async function fetchInvitations() {
       setInvitations(
-        await getDatas(['users'], [['uid', 'in', user.invitations]]),
+        await getDatas(['users'], {
+          wheres: [['uid', 'in', user.invitations]],
+        }),
       );
     }
 
     async function fetchFriends() {
-      setFriends(await getDatas(['users'], [['uid', 'in', user.friends]]));
+      setFriends(
+        await getDatas(['users'], { wheres: [['uid', 'in', user.friends]] }),
+      );
     }
 
     if (user.invitations.length) {
@@ -84,6 +90,33 @@ export default function Friends() {
     };
   }
 
+  function selectFriend(friend) {
+    return async () => {
+      if (
+        chatData &&
+        chatData.pair.includes(friend.uid) &&
+        chatData.pair.includes(user.uid)
+      ) {
+        return;
+      }
+      const uids = [friend.uid, user.uid];
+      const chat = (
+        await getDatas(['chats'], {
+          ors: [
+            {
+              wheres: [
+                ['pair', '==', uids],
+                ['pair', '==', uids.toReversed()],
+              ],
+            },
+          ],
+        })
+      )[0];
+      setChat(chat);
+      setChatUser(friend);
+    };
+  }
+
   return (
     <>
       <AccordionStyled
@@ -91,7 +124,7 @@ export default function Friends() {
         onChange={handleToggleInvite}
       >
         <AccordionSummaryStyled expandIcon={!!invitations.length && <Icon />}>
-          friend invitations ({user.invitations.length})
+          Friend invitations ({user.invitations.length})
         </AccordionSummaryStyled>
         <AccordionDetailsStyled>
           <ListStyled>
@@ -110,25 +143,25 @@ export default function Friends() {
 
       <Divider size={3} />
 
-      {console.log(!!(activeFriendsAccordion && friends.length))}
       <AccordionStyled
         expanded={!!(activeFriendsAccordion && friends.length)}
         onChange={handleToggleFriends}
       >
         <AccordionSummaryStyled expandIcon={!!friends.length && <Icon />}>
-          friend invitations ({user.friends.length})
+          Friends ({user.friends.length})
         </AccordionSummaryStyled>
         <AccordionDetailsStyled>
           <ListStyled>
             {friends.map(friend => (
-              <Friend key={friend.uid} user={friend} />
+              <Friend
+                key={friend.uid}
+                user={friend}
+                onClick={selectFriend(friend)}
+              />
             ))}
           </ListStyled>
         </AccordionDetailsStyled>
       </AccordionStyled>
-      {/* <ListStyled>
-          <Friend />
-        </ListStyled> */}
     </>
   );
 }
@@ -145,7 +178,6 @@ const AccordionSummaryStyled = styled(AccordionSummary)`
   &,
   &.Mui-expanded {
     min-height: auto;
-    /* margin: 5px 0; */
   }
   & .MuiAccordionSummary-content,
   & .MuiAccordionSummary-content.Mui-expanded {

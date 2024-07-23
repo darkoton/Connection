@@ -70,7 +70,9 @@ const createTag = () => {
       );
     }
 
-    if ((await getDatas(['users'], [['tag', '==', result]])).length) {
+    if (
+      (await getDatas(['users'], { wheres: [['tag', '==', result]] })).length
+    ) {
       generate();
     }
   };
