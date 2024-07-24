@@ -1,7 +1,6 @@
 import '@/assets/style/components/app.scss';
 import { RouterProvider } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
 App.propTypes = {
   router: PropTypes.object,
 };

@@ -17,6 +17,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <CssBaseline />
       <App router={router()}></App>
     </ThemeProvider>
-    {/* <App router={router()}></App> */}
   </React.StrictMode>,
 );

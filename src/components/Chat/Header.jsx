@@ -29,6 +29,7 @@ export default function Header() {
 }
 
 const Body = styled.div`
+  user-select: none;
   background-color: ${vars.$colorChat};
   display: flex;
   align-items: center;

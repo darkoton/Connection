@@ -5,7 +5,7 @@ import vars from '@/assets/style/modules/vars.js';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import SentimentSatisfiedOutlinedIcon from '@mui/icons-material/SentimentSatisfiedOutlined';
 import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import EmojiPicker from 'emoji-picker-react';
 import { scrollbars } from '@/assets/style/modules/mixins';
@@ -13,16 +13,32 @@ import TextField from '@mui/material/TextField';
 import useChatStore from '@/stores/chat.js';
 import useUserStore from '@/stores/user.js';
 import { addData, updateData, getData } from '@/utils/firestore.js';
+import { uploadFile } from '@/utils/storage.js';
 import { Timestamp } from 'firebase/firestore';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function Field() {
   const [text, setText] = useState('');
+  const [files, setFiles] = useState([]);
+  const [previewImg, setPreviewImg] = useState(null);
   const [emojiOpen, setEmojiOpen] = useState(false);
-  const { chat, user: chatUser, setChat } = useChatStore();
+  const { chat, user: chatUser, setChat, scrollDown } = useChatStore();
   const { user } = useUserStore();
+  const fileInput = useRef(null);
 
   function selectEmoji(e) {
     setText(text + e.emoji);
+  }
+
+  function selectFiles(e) {
+    setFiles(e.target.files);
+    getImgLink(e.target.files[0]);
+  }
+
+  function resetFiles() {
+    fileInput.current.value = '';
+    setFiles([]);
   }
 
   function onEnterPress(e) {
@@ -39,6 +55,11 @@ export default function Field() {
 
   async function send() {
     let id;
+
+    if (!text.trim() && !files.length) {
+      return;
+    }
+
     if (!chat) {
       id = (
         await addData(['chats'], {
@@ -47,68 +68,125 @@ export default function Field() {
       ).id;
 
       await updateData(['chats', id], { id });
-
       setChat(await getData(['chats', id]));
     }
-
-    addData(['chats', chat.id || id, 'messages'], {
+    const urls = await uploadFile(['chats', chat.id], files);
+    await addData(['chats', chat.id || id, 'messages'], {
       text,
       date: Timestamp.fromDate(new Date()),
       check: false,
       userUid: user.uid,
+      media: urls,
     });
-
     setText('');
+    setFiles([]);
+    scrollDown();
+  }
+
+  function getImgLink(file) {
+    const fileReader = new FileReader();
+
+    fileReader.onload = () => {
+      setPreviewImg(fileReader.result);
+    };
+
+    fileReader.readAsDataURL(file);
   }
 
   return (
     <Body>
-      <Clip />
-      <Input
-        value={text}
-        onChange={e => setText(e.target.value)}
-        placeholder="Input message..."
-        multiline
-        maxRows={4}
-        onKeyDown={onEnterPress}
-      />
-      <Actions>
-        <EmojiBody onMouseLeave={() => setEmojiOpen(false)}>
-          <Emoji
-            onClick={() => setEmojiOpen(!emojiOpen)}
-            onMouseMove={() => setEmojiOpen(true)}
-          />
-          <EmojiPickerBody>
-            <EmojiPickerStyled
-              autoFocusSearch={false}
-              lazyLoadEmojis={true}
-              open={emojiOpen}
-              theme={'light'}
-              onEmojiClick={selectEmoji}
-              style={{
-                '--epr-bg-color': '#212c49',
-                '--epr-picker-border-color': '#1a233a',
-                '--epr-search-input-bg-color': '#151c2e',
-                '--epr-light': '#11192e',
-                '--epr-skin-tone-picker-menu-color': 'rgba(17, 25, 46, 0.6)',
-                '--epr-category-label-bg-color': 'rgba(17, 25, 46, 0.902)',
-                '--epr-hover-bg-color': '#35487c',
-                '--epr-focus-bg-color': '#35487c',
-              }}
+      {!!files.length && (
+        <Top>
+          <FilesOutput>
+            <FilesOutputLeft>
+              {files[0].type.includes('image') ? (
+                <ImgPreview src={previewImg} />
+              ) : (
+                <FilePreview>
+                  <InsertDriveFileIcon />
+                  {files[0].name}
+                </FilePreview>
+              )}
+              {!!(files.length - 1) && (
+                <OtherFiles>+{files.length - 1} files</OtherFiles>
+              )}
+            </FilesOutputLeft>
+
+            <ResetFile onClick={resetFiles} />
+          </FilesOutput>
+        </Top>
+      )}
+
+      <Main>
+        <FileInput
+          ref={fileInput}
+          id="files"
+          type="file"
+          multiple
+          onChange={selectFiles}
+        />
+        <label htmlFor="files">
+          <Clip />
+        </label>
+        <Input
+          value={text}
+          onChange={e => setText(e.target.value)}
+          placeholder="Input message..."
+          multiline
+          maxRows={4}
+          onKeyDown={onEnterPress}
+        />
+        <Actions>
+          <EmojiBody onMouseLeave={() => setEmojiOpen(false)}>
+            <Emoji
+              onClick={() => setEmojiOpen(!emojiOpen)}
+              onMouseMove={() => setEmojiOpen(true)}
             />
-          </EmojiPickerBody>
-        </EmojiBody>
-        {text ? <Send onClick={send} /> : <Mic />}
-      </Actions>
+            <EmojiPickerBody>
+              <EmojiPickerStyled
+                autoFocusSearch={false}
+                lazyLoadEmojis={true}
+                open={emojiOpen}
+                theme={'light'}
+                onEmojiClick={selectEmoji}
+                style={{
+                  '--epr-bg-color': '#212c49',
+                  '--epr-picker-border-color': '#1a233a',
+                  '--epr-search-input-bg-color': '#151c2e',
+                  '--epr-light': '#11192e',
+                  '--epr-skin-tone-picker-menu-color': 'rgba(17, 25, 46, 0.6)',
+                  '--epr-category-label-bg-color': 'rgba(17, 25, 46, 0.902)',
+                  '--epr-hover-bg-color': '#35487c',
+                  '--epr-focus-bg-color': '#35487c',
+                }}
+              />
+            </EmojiPickerBody>
+          </EmojiBody>
+
+          {text || files.length ? <Send onClick={send} /> : <Mic />}
+        </Actions>
+      </Main>
     </Body>
   );
 }
 
 const Body = styled.div`
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  row-gap: 10px;
+
   background: ${vars.$colorChat};
   ${mixins.adaptivIndent('padding', 17, 12, 20, 16, 1)}
+`;
+
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Main = styled.div`
+  display: flex;
+  align-items: flex-end;
 `;
 
 const Icon = css`
@@ -182,5 +260,50 @@ const EmojiPickerBody = styled.div`
 const EmojiPickerStyled = styled(EmojiPicker)`
   & * {
     ${scrollbars(5, vars.$colorMain, '#334881', 5)}
+  }
+`;
+
+const FileInput = styled.input`
+  display: none;
+`;
+
+const FilesOutput = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const FilesOutputLeft = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+`;
+
+const OtherFiles = styled.span`
+  color: #fff;
+`;
+
+const ImgPreview = styled.img`
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+`;
+
+const FilePreview = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ResetFile = styled(CloseIcon)`
+  font-size: 30px;
+  @media (any-hover: hover) {
+    & {
+      cursor: pointer;
+      transition: all 0.3s ease 0s;
+    }
+    &:hover {
+      color: ${vars.$colorMain};
+    }
   }
 `;

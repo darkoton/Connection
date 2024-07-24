@@ -26,7 +26,16 @@ export default function Message({ data }) {
         user={user.uid != data.userUid ? chatUser : user}
         alt="avatar"
       />
-      <MessageText blue={user.uid == data.userUid}>
+      <MessageMain blue={user.uid == data.userUid}>
+        {data.media &&
+          data.media.map(file => {
+            const fileSplit = file.split('type%3D');
+            if (fileSplit[fileSplit.length - 1].includes('image')) {
+              return <MessageImg key={file} src={file} />;
+            }
+            return <div key={file}>{file}</div>;
+          })}
+        {data.text && <MessageText>{data.text}</MessageText>}
         <VectorMessage
           xmlns="http://www.w3.org/2000/svg"
           width="28"
@@ -73,8 +82,7 @@ export default function Message({ data }) {
           <script xmlns="" />
           <script xmlns="" />
         </VectorMessage>
-        {data.text}
-      </MessageText>
+      </MessageMain>
     </Body>
   );
 }
@@ -84,7 +92,9 @@ const Body = styled(ListItem)`
   align-items: flex-end;
 `;
 
-const MessageText = styled.p`
+const MessageMain = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 9.5px 9px;
   background: #fff;
   ${props => props.blue && 'background: #85a7fc;'}
@@ -107,3 +117,8 @@ const VectorMessage = styled.svg`
   bottom: 3px;
   transform: translateX(-50%);
 `;
+const MessageText = styled.p`
+  font-size: 16px;
+`;
+
+const MessageImg = styled.img``;

@@ -17,7 +17,7 @@ body {
   font-family: $fontRoboto;
   color: $colorWhite;
   font-size: 14px;
-  @include scrollbars(7px, #77b9aa, #497172, 6px);
+  @include scrollbars(7px, $colorMain, $colorChat, 6px);
 
   // ._lock-scroll
   &._lock-scroll {
@@ -52,6 +52,7 @@ body {
   flex: 1 1 auto;
   display: flex;
   justify-content: space-between;
+  max-height: 100vh;
 }
 
 // ._container

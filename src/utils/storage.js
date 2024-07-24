@@ -13,11 +13,19 @@ const storage = getStorage(app);
 export async function uploadFile(path, files) {
   const { user } = useUserStore.getState();
   try {
-    const promises = files.map(async file => {
+    const promises = Array.from(files).map(async file => {
       return new Promise(res => {
         const fileRef = ref(
           storage,
-          [...path, file.name + '-' + user.uid].join('/'),
+          [
+            ...path,
+            file.name +
+              '-' +
+              user.uid +
+              new Date().toISOString() +
+              'type' +
+              file.type,
+          ].join('/'),
         );
         uploadBytes(fileRef, file).then(snapshot => {
           getDownloadURL(snapshot.ref).then(url => {

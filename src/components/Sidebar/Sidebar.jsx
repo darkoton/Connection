@@ -20,6 +20,7 @@ const Aside = styled.aside`
   width: 400px;
   background: ${vars.$colorAside};
   display: flex;
+  user-select: none;
 `;
 
 const Body = styled.div`

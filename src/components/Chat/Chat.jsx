@@ -18,8 +18,11 @@ const ChatStyled = styled.div`
   flex-direction: column;
   flex: 1 1 auto;
   background: #161628;
+  max-height: 100vh;
 `;
 
 const Messages = styled(ListMessages)`
   flex: 1 1 auto;
+  max-height: 100vh;
+  overflow: auto;
 `;

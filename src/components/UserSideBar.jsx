@@ -56,6 +56,10 @@ const Aside = styled.aside`
   background-color: ${vars.$colorChat};
   ${mixins.adaptivValue('padding', 20, 15, 1)}
   ${mixins.adaptivValue('column-gap', 15, 7.5, 1)}
+
+  & * {
+    user-select: none;
+  }
 `;
 
 const Header = styled.div`
