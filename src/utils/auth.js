@@ -98,6 +98,7 @@ const createUser = info => {
 const saveUser = user => {
   const setUser = useUserStore.getState().setUser;
   setUser(user);
+  localStorage.setItem('uid', user.uid);
 };
 
 export async function signUp({ email, password, confirmPassword }, action) {
@@ -175,6 +176,7 @@ export async function googleAuth(action) {
 
 // Watch auth
 onAuthStateChanged(auth, async user => {
+  console.log(user);
   try {
     if (user) {
       const userInfo = await getData(['users', user.uid]);

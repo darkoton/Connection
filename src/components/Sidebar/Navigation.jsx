@@ -6,10 +6,12 @@ import { css } from '@emotion/react';
 import vars from '@/assets/style/modules/vars';
 import Menu from '@/components/Sidebar/Menu';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import useUiStore from '@/stores/ui.js';
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const { setChatList } = useUiStore();
 
   const menuToggle = v => () => {
     setMenuOpen(v);
@@ -18,19 +20,15 @@ export default function Navigation() {
   return (
     <Aside>
       <Menu open={menuOpen} toggle={menuToggle} />
-      <Button style={Icon} onClick={menuToggle(true)}>
+      <Button onClick={menuToggle(true)}>
         <MenuIcon />
       </Button>
-      <Link to={`/`}>
-        <Button style={Icon}>
-          <ThreePIcon />
-        </Button>
-      </Link>
-      <Link to={`/friends`}>
-        <Button>
-          <GroupsIcon />
-        </Button>
-      </Link>
+      <Button onClick={() => setChatList(true)}>
+        <ThreePIcon />
+      </Button>
+      <Button onClick={() => setChatList(false)}>
+        <GroupsIcon />
+      </Button>
     </Aside>
   );
 }

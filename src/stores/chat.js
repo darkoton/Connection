@@ -5,7 +5,9 @@ import { orderBy, limit } from 'firebase/firestore';
 let firstLoadMessages = false;
 const useChatStore = create((set, get) => ({
   chat: null,
+
   user: null,
+  setUser: v => set({ user: v }),
 
   chatList: null,
   setChatList: v => {
@@ -79,7 +81,6 @@ const useChatStore = create((set, get) => ({
       };
     });
   },
-  setUser: v => set({ user: v }),
   setValue: v => set(v),
 }));
 

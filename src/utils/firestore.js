@@ -45,21 +45,21 @@ const getOther = other => {
 };
 
 const getQuery = (path, queries) => {
-  if (!path.length % 2) {
-    return query(
-      doc(db, ...path),
+  let constraints = [];
+
+  if (queries) {
+    constraints.push(
       ...getWheres(queries.wheres),
       ...getOrs(queries.ors),
       ...getOther(queries.other),
     );
   }
 
-  return query(
-    collection(db, ...path),
-    ...getWheres(queries.wheres),
-    ...getOrs(queries.ors),
-    ...getOther(queries.other),
-  );
+  if (!path.length % 2) {
+    return query(doc(db, ...path), ...constraints);
+  }
+
+  return query(collection(db, ...path), ...constraints);
 };
 
 export async function setData(path, body) {

@@ -2,15 +2,19 @@ import styled from '@emotion/styled';
 import vars from '@/assets/style/modules/vars';
 import Header from '@/components/Sidebar/Header';
 import Navigation from '@/components/Sidebar/Navigation';
-import { Outlet } from 'react-router-dom';
+import ChatsList from '@/components/Sidebar/List';
+import Friends from '@/components/Sidebar/Friends';
+import useUiStore from '@/stores/ui.js';
 
 export default function Sidebar() {
+  const { chatList } = useUiStore();
+
   return (
     <Aside>
       <Navigation />
       <Body>
         <Header />
-        <Outlet />
+        {chatList ? <ChatsList /> : <Friends />}
       </Body>
     </Aside>
   );
