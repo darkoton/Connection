@@ -10,22 +10,21 @@ import useUserStore from '@/stores/user.js';
 
 const storage = getStorage(app);
 
-export async function uploadFile(path, files) {
-  const { user } = useUserStore.getState();
+export async function uploadFile(path, files = []) {
   try {
+    if (!files.length) {
+      return [];
+    }
+
+    const { user } = useUserStore.getState();
+
     const promises = Array.from(files).map(async file => {
       return new Promise(res => {
         const fileRef = ref(
           storage,
-          [
-            ...path,
-            file.name +
-              '-' +
-              user.uid +
-              new Date().toISOString() +
-              'type' +
-              file.type,
-          ].join('/'),
+          [...path, file.name + '-' + user.uid + new Date().toISOString()].join(
+            '/',
+          ),
         );
         uploadBytes(fileRef, file).then(snapshot => {
           getDownloadURL(snapshot.ref).then(url => {

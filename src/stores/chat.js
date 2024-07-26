@@ -37,6 +37,10 @@ const useChatStore = create((set, get) => ({
 
   setChat: v => {
     set(state => {
+      if (!v) {
+        return { chat: v };
+      }
+
       if (state.messagesWatch) {
         state.messagesWatch();
       }

@@ -29,7 +29,28 @@ export default function ListMessages() {
     <>
       <ListStyled ref={listRef}>
         {chat &&
-          messages.map(mess => <Message key={mess.id} data={mess}></Message>)}
+          (() => {
+            // let prevUser = null;
+            let showAvatar = true;
+            return messages.map((mess, i) => {
+              // console.log(prevUser, mess.userUid);
+              if (messages[i + 1] && mess.userUid == messages[i + 1].userUid) {
+                showAvatar = false;
+              } else {
+                showAvatar = true;
+              }
+
+              // prevUser = mess.userUid;
+
+              return (
+                <Message
+                  key={mess.id}
+                  showAvatar={showAvatar}
+                  data={mess}
+                ></Message>
+              );
+            });
+          })()}
       </ListStyled>
     </>
   );

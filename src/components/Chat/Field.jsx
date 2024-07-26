@@ -70,13 +70,34 @@ export default function Field() {
       await updateData(['chats', id], { id });
       setChat(await getData(['chats', id]));
     }
-    const urls = await uploadFile(['chats', chat.id], files);
+
+    const imageUrls = [];
+    const urls = [];
+    if (files.length) {
+      const filesArray = Array.from(files);
+
+      imageUrls.push(
+        ...(await uploadFile(
+          ['chats', chat.id],
+          filesArray.filter(file => file.type.includes('image')),
+        )),
+      );
+
+      urls.push(
+        ...(await uploadFile(
+          ['chats', chat.id],
+          filesArray.filter(file => !file.type.includes('image')),
+        )),
+      );
+    }
+
     await addData(['chats', chat.id || id, 'messages'], {
       text,
       date: Timestamp.fromDate(new Date()),
       check: false,
       userUid: user.uid,
       media: urls,
+      imgs: imageUrls,
     });
     setText('');
     setFiles([]);

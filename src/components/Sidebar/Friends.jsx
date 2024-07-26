@@ -13,6 +13,7 @@ import useChatStore from '@/stores/chat.js';
 import { useEffect, useState } from 'react';
 import { getDatas, updateData } from '@/utils/firestore.js';
 import { arrayUnion, arrayRemove } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 export default function Friends() {
   const { user, setUser } = useUserStore();
@@ -21,6 +22,8 @@ export default function Friends() {
   const [invitations, setInvitations] = useState([]);
   const [activeInviteAccordion, setActiveInviteAccordion] = useState(false);
   const [activeFriendsAccordion, setActiveFriendsAccordion] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchInvitations() {
@@ -114,6 +117,7 @@ export default function Friends() {
       )[0];
       setChat(chat);
       setChatUser(friend);
+      navigate(`/chat/${chat.id}`);
     };
   }
 
