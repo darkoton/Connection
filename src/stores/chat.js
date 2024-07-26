@@ -60,7 +60,6 @@ const useChatStore = create((set, get) => ({
               state.setMessages(data.reverse());
             }
             const newMessages = state.messages;
-
             data.forEach(message => {
               if (message.type == 'added') {
                 newMessages.push(message);

@@ -4,15 +4,20 @@ import * as mixins from '@/assets/style/modules/mixins.js';
 import vars from '@/assets/style/modules/vars.js';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { ListItem } from '@mui/material';
+import propTypes from 'prop-types';
 
-export default function ChatItem() {
+ChatItem.propTypes = {
+  chat: propTypes.object,
+};
+
+export default function ChatItem({ chat, ...props }) {
   return (
-    <Body>
-      <AvatarStyled size={60} current alt="Travis Howard" />
+    <Body {...props}>
+      <AvatarStyled user={chat.user} size={60} current alt="Travis Howard" />
 
       <Info>
         <Left>
-          <Username>Username</Username>
+          <Username>{chat.user.displayName}</Username>
           <Message>Message</Message>
         </Left>
         <Right>
@@ -50,14 +55,19 @@ const Info = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  overflow: hidden;
 `;
 const Left = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 80%;
 `;
 
 const Username = styled.span`
   ${mixins.adaptivValue('font-size', 16, 14, 1)}
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 const Message = styled.span`

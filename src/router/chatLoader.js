@@ -4,6 +4,10 @@ import useChatStore from '@/stores/chat.js';
 export default async function getChatData({ params }) {
   const chatStore = useChatStore.getState();
 
+  if (chatStore.chat) {
+    return null;
+  }
+
   const currentUid = localStorage.getItem('uid');
   const chat = await getData(['chats', params.id]);
   chatStore.setChat(chat);
