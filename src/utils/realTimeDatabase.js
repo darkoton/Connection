@@ -1,5 +1,5 @@
 import { getDatabase, ref, onValue, set, push, query } from 'firebase/database';
-import app from './firebase.js';
+import app from './firebase';
 const db = getDatabase(app);
 
 export function writeData(path, body) {

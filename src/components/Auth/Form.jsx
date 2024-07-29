@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import * as mixins from '@/assets/style/modules/mixins.js';
+import * as mixins from '@/assets/style/modules/mixins';
 import googleImg from '@/assets/img/google.svg';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';

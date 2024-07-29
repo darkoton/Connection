@@ -10,8 +10,8 @@ import styled from '@emotion/styled';
 import propTypes from 'prop-types';
 import { updateData } from '@/utils/firestore';
 import { useState } from 'react';
-import vars from '@/assets/style/modules/vars.js';
-import useUserStore from '@/stores/user.js';
+import vars from '@/assets/style/modules/vars';
+import useUserStore from '@/stores/user';
 import { arrayUnion } from 'firebase/firestore';
 
 InviteFriendModal.propTypes = {

@@ -1,8 +1,8 @@
 import { SwipeableDrawer, Box } from '@mui/material/';
 import propTypes from 'prop-types';
 import styled from '@emotion/styled';
-import vars from '@/assets/style/modules/vars.js';
-import useUserStore from '@/stores/user.js';
+import vars from '@/assets/style/modules/vars';
+import useUserStore from '@/stores/user';
 import Avatar from '@/components/User/Avatar';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useState } from 'react';

@@ -5,7 +5,7 @@ import ErrorPage from '@/routes/error';
 import Auth from '@/routes/auth';
 import Chat from '@/components/Chat/Chat';
 
-import chatLoader from '@/router/chatLoader.js';
+import chatLoader from '@/router/chatLoader';
 const routes = [
   {
     path: '/',
@@ -14,6 +14,10 @@ const routes = [
       {
         path: '/chat/:id',
         loader: chatLoader,
+        element: <Chat />,
+      },
+      {
+        path: '/friend/:id',
         element: <Chat />,
       },
     ],

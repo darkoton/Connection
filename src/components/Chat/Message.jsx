@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { ListItem } from '@mui/material';
-import * as mixins from '@/assets/style/modules/mixins.js';
+import * as mixins from '@/assets/style/modules/mixins';
 import propTypes from 'prop-types';
 import useChatStore from '@/stores/chat';
 import useUserStore from '@/stores/user';
@@ -110,7 +110,12 @@ export default function Message({ data, showAvatar = true }) {
         )}
 
         <Time className="time">
-          {data.date.toDate().getHours()}:{data.date.toDate().getMinutes()}
+          {data.date
+            .toDate()
+            .toLocaleTimeString()
+            .split(':')
+            .slice(0, 2)
+            .join(':')}
         </Time>
       </MessageMain>
     </Body>
@@ -122,6 +127,8 @@ const Body = styled(ListItem)`
   align-items: flex-end;
   width: 100%;
   max-width: 60%;
+  padding-top: 4px;
+  padding-bottom: 4px;
 `;
 
 const MessageMain = styled.div`

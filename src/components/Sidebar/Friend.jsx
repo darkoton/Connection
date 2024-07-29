@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import Avatar from '@/components/User/Avatar';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
-import vars from '@/assets/style/modules/vars.js';
+import vars from '@/assets/style/modules/vars';
 
 Friend.propTypes = {
   invite: propTypes.bool,

@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import * as mixins from '@/assets/style/modules/mixins.js';
-import vars from '@/assets/style/modules/vars.js';
+import * as mixins from '@/assets/style/modules/mixins';
+import vars from '@/assets/style/modules/vars';
 import { List } from '@mui/material';
 import Message from '@/components/Chat/Message';
-import useChatStore from '@/stores/chat.js';
+import useChatStore from '@/stores/chat';
 import { useRef, useEffect } from 'react';
 export default function ListMessages() {
   const { chat, messages, chatScroll, setChatList, scrollDown } =

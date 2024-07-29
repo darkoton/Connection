@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { watchData } from '@/utils/firestore.js';
+import { watchData } from '@/utils/firestore';
 import { orderBy, limit } from 'firebase/firestore';
 
 let firstLoadMessages = false;
@@ -38,48 +38,57 @@ const useChatStore = create((set, get) => ({
   setMessagesWatch: v => set({ messagesWatch: v }),
 
   setChat: v => {
-    set(state => {
-      if (!v) {
-        return { chat: v };
-      }
+    if (!v) {
+      set({ chat: v });
+      return;
+    }
 
+    set(state => {
       if (state.messagesWatch) {
         state.messagesWatch();
       }
-      firstLoadMessages = false;
+      firstLoadMessages = true;
 
-      state.setMessagesWatch(
-        watchData(
-          ['chats', v.id, 'messages'],
-          messages => {
-            const data = messages.docChanges().map(m => {
-              return { ...m.doc.data(), type: m.type, id: m.doc.id };
-            });
-            if (!firstLoadMessages) {
-              firstLoadMessages = true;
-              state.setMessages(data.reverse());
-            }
-            const newMessages = state.messages;
-            data.forEach(message => {
-              if (message.type == 'added') {
+      const unsubscribe = watchData(
+        ['chats', v.id, 'messages'],
+        snapshot => {
+          const changes = snapshot.docChanges().map(m => ({
+            ...m.doc.data(),
+            type: m.type,
+            id: m.doc.id,
+          }));
+
+          if (firstLoadMessages) {
+            firstLoadMessages = false;
+            state.setMessages(changes.reverse());
+            return;
+          }
+
+          set(state => {
+            const newMessages = [...state.messages];
+            changes.forEach(message => {
+              if (message.type === 'added') {
                 newMessages.push(message);
-              } else if (message.type == 'edited') {
-                // return;
+              } else if (message.type === 'modified') {
+                const index = newMessages.findIndex(i => i.id === message.id);
+                if (index !== -1) {
+                  newMessages[index] = message;
+                }
               }
             });
-
-            state.setMessages(newMessages);
-          },
-          {
-            other: [orderBy('date', 'desc'), limit(20)],
-          },
-        ),
+            return { messages: newMessages };
+          });
+        },
+        {
+          other: [orderBy('date', 'desc'), limit(20)],
+        },
       );
-      return {
-        chat: v,
-      };
+
+      state.setMessagesWatch(unsubscribe);
+      return { chat: v };
     });
   },
+
   setValue: v => set(v),
 }));
 

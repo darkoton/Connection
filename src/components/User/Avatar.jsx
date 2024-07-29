@@ -1,5 +1,5 @@
 import { Avatar } from '@mui/material';
-import useUserStore from '@/stores/user.js';
+import useUserStore from '@/stores/user';
 import propTypes from 'prop-types';
 
 UserAvatar.propTypes = {

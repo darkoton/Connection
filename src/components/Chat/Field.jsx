@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import * as mixins from '@/assets/style/modules/mixins.js';
-import vars from '@/assets/style/modules/vars.js';
+import * as mixins from '@/assets/style/modules/mixins';
+import vars from '@/assets/style/modules/vars';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import SentimentSatisfiedOutlinedIcon from '@mui/icons-material/SentimentSatisfiedOutlined';
 import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
@@ -10,10 +10,10 @@ import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import EmojiPicker from 'emoji-picker-react';
 import { scrollbars } from '@/assets/style/modules/mixins';
 import TextField from '@mui/material/TextField';
-import useChatStore from '@/stores/chat.js';
-import useUserStore from '@/stores/user.js';
-import { addData, updateData, getData } from '@/utils/firestore.js';
-import { uploadFile } from '@/utils/storage.js';
+import useChatStore from '@/stores/chat';
+import useUserStore from '@/stores/user';
+import { addData, updateData, getData } from '@/utils/firestore';
+import { uploadFile } from '@/utils/storage';
 import { Timestamp } from 'firebase/firestore';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import CloseIcon from '@mui/icons-material/Close';
@@ -64,6 +64,10 @@ export default function Field() {
       id = (
         await addData(['chats'], {
           pair: [user.uid, chatUser.uid],
+          users: {
+            [user.uid]: user,
+            [chatUser.uid]: chatUser,
+          },
         })
       ).id;
 
@@ -91,14 +95,18 @@ export default function Field() {
       );
     }
 
-    await addData(['chats', chat.id || id, 'messages'], {
+    const message = {
       text,
       date: Timestamp.fromDate(new Date()),
       check: false,
       userUid: user.uid,
       media: urls,
       imgs: imageUrls,
-    });
+    };
+
+    await updateData(['chats', id || chat.id], { lastMessage: message });
+
+    await addData(['chats', id || chat.id, 'messages'], message);
     setText('');
     setFiles([]);
     scrollDown();

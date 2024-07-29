@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import vars from '@/assets/style/modules/vars.js';
-import * as mixins from '@/assets/style/modules/mixins.js';
+import vars from '@/assets/style/modules/vars';
+import * as mixins from '@/assets/style/modules/mixins';
 import StartOutlinedIcon from '@mui/icons-material/StartOutlined';
 import Avatar from '@/components/User/Avatar';
 import useChatStore from '@/stores/chat';

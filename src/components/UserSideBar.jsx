@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import vars from '@/assets/style/modules/vars.js';
-import * as mixins from '@/assets/style/modules/mixins.js';
+import vars from '@/assets/style/modules/vars';
+import * as mixins from '@/assets/style/modules/mixins';
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@/components/User/Avatar';
 import { List, ListItem } from '@mui/material';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import BackHandOutlinedIcon from '@mui/icons-material/BackHandOutlined';
-import useChatStore from '@/stores/chat.js';
-import useUiStore from '@/stores/ui.js';
+import useChatStore from '@/stores/chat';
+import useUiStore from '@/stores/ui';
 
 export default function UserSideBar() {
   const { user } = useChatStore();

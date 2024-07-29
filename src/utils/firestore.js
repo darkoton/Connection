@@ -11,8 +11,9 @@ import {
   updateDoc,
   or,
   onSnapshot,
+  writeBatch,
 } from 'firebase/firestore';
-import app from './firebase.js';
+import app from './firebase';
 
 const db = getFirestore(app);
 
@@ -109,12 +110,17 @@ export async function getData(path, options = {}) {
   return querySnapshot.data();
 }
 
-export async function updateData(path, updateBody, wheres) {
-  if (wheres) {
-    const datas = await getDatas(path, wheres, { getDoc: true });
+export async function updateData(path, updateBody, queries) {
+  if (queries) {
+    const batch = writeBatch(db);
+
+    const datas = await getDatas(path, queries, { getDoc: true });
     datas.forEach(async data => {
-      await updateDoc(data.ref, updateBody);
+      // await updateDoc(data.ref, updateBody);
+      batch.update(data.ref, updateBody);
     });
+
+    await batch.commit();
 
     return {
       type: 'success',

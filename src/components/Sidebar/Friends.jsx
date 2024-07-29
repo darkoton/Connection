@@ -8,10 +8,10 @@ import {
 import Friend from '@/components/Sidebar/Friend';
 import Divider from '@/components/ui/Divider';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import useUserStore from '@/stores/user.js';
-import useChatStore from '@/stores/chat.js';
+import useUserStore from '@/stores/user';
+import useChatStore from '@/stores/chat';
 import { useEffect, useState } from 'react';
-import { getDatas, updateData } from '@/utils/firestore.js';
+import { getDatas, updateData } from '@/utils/firestore';
 import { arrayUnion, arrayRemove } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
@@ -117,7 +117,12 @@ export default function Friends() {
       )[0];
       setChat(chat);
       setChatUser(friend);
-      navigate(`/chat/${chat.id}`);
+
+      if (chat) {
+        navigate(`/chat/${chat.id}`);
+      } else {
+        navigate(`/friend/${friend.uid}`);
+      }
     };
   }
 

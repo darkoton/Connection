@@ -1,10 +1,10 @@
 import { AppBar, Toolbar } from '@mui/material';
 import logo from '@/assets/img/logo.png';
 import styled from '@emotion/styled';
-import * as mixins from '@/assets/style/modules/mixins.js';
+import * as mixins from '@/assets/style/modules/mixins';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import vars from '@/assets/style/modules/vars.js';
+import vars from '@/assets/style/modules/vars';
 import { useState } from 'react';
 import InviteFriendModal from '@/components/InviteFriendModal';
 

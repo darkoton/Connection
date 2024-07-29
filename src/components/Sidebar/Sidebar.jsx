@@ -4,7 +4,7 @@ import Header from '@/components/Sidebar/Header';
 import Navigation from '@/components/Sidebar/Navigation';
 import ChatsList from '@/components/Sidebar/List';
 import Friends from '@/components/Sidebar/Friends';
-import useUiStore from '@/stores/ui.js';
+import useUiStore from '@/stores/ui';
 
 export default function Sidebar() {
   const { chatList } = useUiStore();

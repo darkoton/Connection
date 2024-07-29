@@ -7,9 +7,9 @@ import {
   signInWithPopup,
   signOut as signOutFire,
 } from 'firebase/auth';
-import { setData, getData, getDatas } from './firestore.js';
-import app from './firebase.js';
-import useUserStore from '../stores/user.js';
+import { setData, getData, getDatas } from './firestore';
+import app from './firebase';
+import useUserStore from '../stores/user';
 
 const auth = getAuth(app);
 auth.useDeviceLanguage();
@@ -82,7 +82,7 @@ const createTag = () => {
 };
 
 const createUser = info => {
-  return setData('users', info.uid, {
+  return setData(['users', info.uid], {
     displayName: info.displayName,
     email: info.email,
     phoneNumber: info.phoneNumber,
@@ -163,7 +163,7 @@ export async function googleAuth(action) {
     // if sign up
     if (!userInfo) {
       createUser(user);
-      saveUser(user);
+      saveUser(await getData(['users', user.uid]));
     } else {
       saveUser(userInfo);
     }
@@ -176,7 +176,6 @@ export async function googleAuth(action) {
 
 // Watch auth
 onAuthStateChanged(auth, async user => {
-  console.log(user);
   try {
     if (user) {
       const userInfo = await getData(['users', user.uid]);

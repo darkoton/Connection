@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import * as mixins from '@/assets/style/modules/mixins.js';
+import * as mixins from '@/assets/style/modules/mixins';
 import PropTypes from 'prop-types';
 
 UiButton.propTypes = {

@@ -6,7 +6,7 @@ import {
   deleteObject,
   getDownloadURL,
 } from 'firebase/storage';
-import useUserStore from '@/stores/user.js';
+import useUserStore from '@/stores/user';
 
 const storage = getStorage(app);
 

@@ -1,5 +1,5 @@
-import { getData } from '@/utils/firestore.js';
-import useChatStore from '@/stores/chat.js';
+import { getData } from '@/utils/firestore';
+import useChatStore from '@/stores/chat';
 
 export default async function getChatData({ params }) {
   const chatStore = useChatStore.getState();
@@ -10,12 +10,14 @@ export default async function getChatData({ params }) {
 
   const currentUid = localStorage.getItem('uid');
   const chat = await getData(['chats', params.id]);
+
+  if (!chat) {
+    return null;
+  }
+
   chatStore.setChat(chat);
 
-  const user = await getData([
-    'users',
-    chat.pair.filter(u => u != currentUid)[0],
-  ]);
+  const user = chat.users[chat.pair.filter(u => u != currentUid)[0]];
 
   chatStore.setUser(user);
 

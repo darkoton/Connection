@@ -4,14 +4,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Button } from '@mui/material';
 import propTypes from 'prop-types';
-import useUserStore from '@/stores/user.js';
+import useUserStore from '@/stores/user';
 import { useState } from 'react';
 import Input from '@/components/ui/Input';
 import Avatar from '@/components/User/Avatar';
 import styled from '@emotion/styled';
 import UploadIcon from '@mui/icons-material/Upload';
-import { uploadFile, deleteFile } from '@/utils/storage.js';
-import { updateData } from '@/utils/firestore.js';
+import { uploadFile, deleteFile } from '@/utils/storage';
+import { updateData } from '@/utils/firestore';
 
 EditModal.propTypes = {
   open: propTypes.bool,
@@ -68,6 +68,14 @@ export default function EditModal({ open, onClose }) {
     }
 
     await updateData(['users', user.uid], newUserData);
+    await updateData(
+      ['chats'],
+      {
+        ['users.' + [user.uid]]: newUserData,
+      },
+      { wheres: [['pair', 'array-contains', user.uid]] },
+    );
+
     setUser(newUserData);
     onClose();
   };

@@ -6,7 +6,7 @@ import { css } from '@emotion/react';
 import vars from '@/assets/style/modules/vars';
 import Menu from '@/components/Sidebar/Menu';
 import { useState } from 'react';
-import useUiStore from '@/stores/ui.js';
+import useUiStore from '@/stores/ui';
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);

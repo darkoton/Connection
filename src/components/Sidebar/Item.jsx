@@ -1,28 +1,48 @@
 import styled from '@emotion/styled';
 import Avatar from '@/components/User/Avatar';
-import * as mixins from '@/assets/style/modules/mixins.js';
-import vars from '@/assets/style/modules/vars.js';
+import * as mixins from '@/assets/style/modules/mixins';
+import vars from '@/assets/style/modules/vars';
+import DoneIcon from '@mui/icons-material/Done';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { ListItem } from '@mui/material';
 import propTypes from 'prop-types';
+import useUserStore from '@/stores/user';
+import { useRef } from 'react';
 
 ChatItem.propTypes = {
   chat: propTypes.object,
 };
 
 export default function ChatItem({ chat, ...props }) {
+  const { user: currentUser } = useUserStore();
+  const user = useRef(
+    chat.users[chat.pair.filter(i => i != currentUser.uid)[0]],
+  );
+
   return (
     <Body {...props}>
-      <AvatarStyled user={chat.user} size={60} current alt="Travis Howard" />
+      <AvatarStyled user={user.current} size={60} current alt="Travis Howard" />
 
       <Info>
         <Left>
-          <Username>{chat.user.displayName}</Username>
-          <Message>Message</Message>
+          <Username>{user.current.displayName}</Username>
+          <Message>{chat.lastMessage.text}</Message>
         </Left>
         <Right>
-          <Time>13:32</Time>
-          <Check />
+          <Time>
+            {chat.lastMessage.date
+              .toDate()
+              .toLocaleTimeString()
+              .split(':')
+              .slice(0, 2)
+              .join(':')}
+          </Time>
+
+          {chat.lastMessage.check ? (
+            <Check as={DoneAllIcon} />
+          ) : (
+            <Check as={DoneIcon} />
+          )}
         </Right>
       </Info>
     </Body>
@@ -84,7 +104,7 @@ const Time = styled.div`
   ${mixins.adaptivValue('font-size', 16, 14, 1)}
 `;
 
-const Check = styled(DoneAllIcon)`
+const Check = styled.div`
   ${mixins.adaptivValue('font-size', 22, 18, 1)}
   color:${vars.$colorMain}
 `;

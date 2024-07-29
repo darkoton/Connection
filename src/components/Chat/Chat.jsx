@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Header from '@/components/Chat/Header';
 import Field from '@/components/Chat/Field';
 import ListMessages from '@/components/Chat/ListMessages';
-import vars from '@/assets/style/modules/vars.js';
+import vars from '@/assets/style/modules/vars';
 import useChatStore from '@/stores/chat';
 
 export default function Chat() {
