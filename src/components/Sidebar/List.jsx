@@ -16,14 +16,12 @@ export default function Chats() {
   const [noChats, setNoChats] = useState(false);
   // const [firstLoad, setFirstLoad] = useState(true);
   useEffect(() => {
-    console.log('effect');
     let firstLoad = true;
 
     const unsubscribe = watchData(
       ['chats'],
       snapshot => {
         const changes = snapshot.docChanges();
-        console.log(firstLoad);
 
         if (!changes.length) {
           setNoChats(true);
@@ -37,8 +35,6 @@ export default function Chats() {
         }
 
         setChats(prevChats => {
-          console.log(changes);
-
           const updatedChats = [...prevChats];
           changes.forEach(c => {
             if (c.type == 'added') {

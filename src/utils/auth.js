@@ -165,7 +165,7 @@ export async function googleAuth(action) {
       createUser(user);
       saveUser(await getData(['users', user.uid]));
     } else {
-      saveUser(userInfo);
+      return;
     }
 
     action();
@@ -186,6 +186,7 @@ onAuthStateChanged(auth, async user => {
         return;
       }
     } else {
+      useUserStore.getState().setUser(user);
       return;
     }
   } catch (error) {
