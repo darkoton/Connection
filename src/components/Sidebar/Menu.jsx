@@ -8,6 +8,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import EditModal from '@/components/User/EditDialog';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 Menu.propTypes = {
   open: propTypes.bool,
@@ -23,7 +25,7 @@ export default function Menu({ open, toggle }) {
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
-    }, 500);
+    }, 2000);
   }
 
   return (
@@ -58,6 +60,9 @@ export default function Menu({ open, toggle }) {
               <CopyToClipboard text={user.tag} onCopy={copy}>
                 <Tag className={copied && 'copied'}>{user.tag}</Tag>
               </CopyToClipboard>
+              <Snackbar open={copied}>
+                <Alert severity="success">Tag copied!</Alert>
+              </Snackbar>
             </Profile>
           )}
         </BoxStyled>

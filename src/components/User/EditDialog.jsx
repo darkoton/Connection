@@ -12,6 +12,8 @@ import styled from '@emotion/styled';
 import UploadIcon from '@mui/icons-material/Upload';
 import { uploadFile, deleteFile } from '@/utils/storage';
 import { updateData } from '@/utils/firestore';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 EditModal.propTypes = {
   open: propTypes.bool,
@@ -23,6 +25,7 @@ export default function EditModal({ open, onClose }) {
   const [userForm, setUserForm] = useState(user);
   const [avatarFile, setAvatarFile] = useState();
   const [avatarDelete, setAvatarDelete] = useState(false);
+  const [edited, setEdited] = useState(false);
 
   const setDisplayName = () => e =>
     setUserForm({ ...userForm, displayName: e.target.value });
@@ -77,51 +80,61 @@ export default function EditModal({ open, onClose }) {
     );
 
     setUser(newUserData);
+    setEdited(true);
     onClose();
+
+    setTimeout(() => {
+      setEdited(false);
+    }, 2000);
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">Edit profile</DialogTitle>
-      <DialogContentStyled sx={{ overflow: 'visible' }}>
-        <UploadAvatar>
-          <UploadLabel htmlFor="avatar">
-            <Avatar src={userForm.photoURL} size={80} />
-            <UploadIconStyled />
-          </UploadLabel>
-          <InputFile
-            type="file"
-            name="avatar"
-            id="avatar"
-            onChange={selectAvatar}
-            accept=".png, .jpg, .jpeg, .webp, .avif, .heic, .gif"
+    <>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Edit profile</DialogTitle>
+        <DialogContentStyled sx={{ overflow: 'visible' }}>
+          <UploadAvatar>
+            <UploadLabel htmlFor="avatar">
+              <Avatar src={userForm.photoURL} size={80} />
+              <UploadIconStyled />
+            </UploadLabel>
+            <InputFile
+              type="file"
+              name="avatar"
+              id="avatar"
+              onChange={selectAvatar}
+              accept=".png, .jpg, .jpeg, .webp, .avif, .heic, .gif"
+            />
+          </UploadAvatar>
+          <Input
+            id="username"
+            placeholder="Username"
+            value={userForm.displayName}
+            onChange={setDisplayName()}
           />
-        </UploadAvatar>
-        <Input
-          id="username"
-          placeholder="Username"
-          value={userForm.displayName}
-          onChange={setDisplayName()}
-        />
-        <Input
-          id="phone"
-          placeholder="Phone"
-          value={userForm.phoneNumber || ''}
-          onChange={setPhone()}
-        />
-      </DialogContentStyled>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={confirm} autoFocus>
-          Confirm
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <Input
+            id="phone"
+            placeholder="Phone"
+            value={userForm.phoneNumber || ''}
+            onChange={setPhone()}
+          />
+        </DialogContentStyled>
+        <DialogActions>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={confirm} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar open={edited}>
+        <Alert severity="success">Profile changed!</Alert>
+      </Snackbar>
+    </>
   );
 }
 
