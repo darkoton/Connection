@@ -71,7 +71,8 @@ const createTag = () => {
     }
 
     if (
-      (await getDatas(['users'], { wheres: [['tag', '==', result]] })).length
+      (await getDatas(['users'], { wheres: [['tag', '==', result]] })).data
+        .length
     ) {
       generate();
     }

@@ -14,7 +14,6 @@ export default function Chats() {
   const { chat: currentChat, setChat, setUser } = useChatStore();
   const navigate = useNavigate();
   const [noChats, setNoChats] = useState(false);
-  // const [firstLoad, setFirstLoad] = useState(true);
   useEffect(() => {
     let firstLoad = true;
 
@@ -52,7 +51,7 @@ export default function Chats() {
       },
       {
         wheres: [['pair', 'array-contains', user.uid]],
-        other: [limit(20), orderBy('lastMessage.date', 'desc')],
+        other: [limit(30), orderBy('lastMessage.date', 'desc')],
       },
     );
 

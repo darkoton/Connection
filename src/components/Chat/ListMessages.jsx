@@ -5,10 +5,22 @@ import { List } from '@mui/material';
 import Message from '@/components/Chat/Message';
 import useChatStore from '@/stores/chat';
 import { useRef, useEffect } from 'react';
+import { getDatas } from '@/utils/firestore';
+import { orderBy, limit, startAfter } from 'firebase/firestore';
+
 export default function ListMessages() {
-  const { chat, messages, chatScroll, setChatList, scrollDown } =
-    useChatStore();
+  const {
+    chat,
+    messages,
+    setMessages,
+    chatScroll,
+    setChatList,
+    scrollDown,
+    lastMessageDoc,
+    setLastMessageDoc,
+  } = useChatStore();
   const listRef = useRef();
+  const isLoad = useRef(false);
 
   useEffect(() => {
     if (listRef.current) {
@@ -25,22 +37,53 @@ export default function ListMessages() {
     }
   }, [chatScroll, scrollDown, messages.length]);
 
+  useEffect(() => {
+    const list = listRef.current;
+    async function scrollLoadHandle(e) {
+      const y = e.target.scrollTop;
+
+      if (!lastMessageDoc) {
+        return;
+      }
+
+      if (y < 150 && !isLoad.current) {
+        isLoad.current = true;
+        const { data, last } = await getDatas(
+          ['chats', chat.id, 'messages'],
+          {
+            other: [
+              orderBy('date', 'desc'),
+              limit(30),
+              startAfter(lastMessageDoc),
+            ],
+          },
+          { last: true, id: true },
+        );
+        setMessages([...data.reverse(), ...messages]);
+        setLastMessageDoc(last);
+        isLoad.current = false;
+      }
+    }
+
+    list.addEventListener('scroll', scrollLoadHandle);
+
+    return () => {
+      list.removeEventListener('scroll', scrollLoadHandle);
+    };
+  }, [chat.id, lastMessageDoc, messages, setMessages]);
+
   return (
     <>
-      <ListStyled ref={listRef}>
+      <ListStyled ref={listRef} className="test">
         {chat &&
           (() => {
-            // let prevUser = null;
             let showAvatar = true;
             return messages.map((mess, i) => {
-              // console.log(prevUser, mess.userUid);
               if (messages[i + 1] && mess.userUid == messages[i + 1].userUid) {
                 showAvatar = false;
               } else {
                 showAvatar = true;
               }
-
-              // prevUser = mess.userUid;
 
               return (
                 <Message

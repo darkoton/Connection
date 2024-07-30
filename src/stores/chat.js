@@ -34,6 +34,9 @@ const useChatStore = create((set, get) => ({
   messages: [],
   setMessages: v => set({ messages: v }),
 
+  lastMessageDoc: null,
+  setLastMessageDoc: v => set({ lastMessageDoc: v }),
+
   messagesWatch: null,
   setMessagesWatch: v => set({ messagesWatch: v }),
 
@@ -52,15 +55,14 @@ const useChatStore = create((set, get) => ({
       const unsubscribe = watchData(
         ['chats', v.id, 'messages'],
         snapshot => {
-          const changes = snapshot.docChanges().map(m => ({
-            ...m.doc.data(),
-            type: m.type,
-            id: m.doc.id,
-          }));
+          const changes = snapshot.docChanges();
 
           if (firstLoadMessages) {
             firstLoadMessages = false;
-            state.setMessages(changes.reverse());
+            state.setMessages(
+              changes.reverse().map(m => ({ id: m.doc.id, ...m.doc.data() })),
+            );
+            state.setLastMessageDoc(changes[0].doc);
             return;
           }
 
@@ -68,11 +70,16 @@ const useChatStore = create((set, get) => ({
             const newMessages = [...state.messages];
             changes.forEach(message => {
               if (message.type === 'added') {
-                newMessages.push(message);
+                newMessages.push({ id: message.doc.id, ...message.doc.data() });
               } else if (message.type === 'modified') {
-                const index = newMessages.findIndex(i => i.id === message.id);
+                const index = newMessages.findIndex(
+                  i => i.id === message.doc.id,
+                );
                 if (index !== -1) {
-                  newMessages[index] = message;
+                  newMessages[index] = {
+                    id: message.doc.id,
+                    ...message.doc.data(),
+                  };
                 }
               }
             });
@@ -80,7 +87,7 @@ const useChatStore = create((set, get) => ({
           });
         },
         {
-          other: [orderBy('date', 'desc'), limit(20)],
+          other: [orderBy('date', 'desc'), limit(30)],
         },
       );
 

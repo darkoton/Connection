@@ -95,8 +95,11 @@ export default function Field() {
       );
     }
 
+    setText('');
+    setFiles([]);
+
     const message = {
-      text,
+      text: index,
       date: Timestamp.fromDate(new Date()),
       check: false,
       userUid: user.uid,
@@ -107,8 +110,7 @@ export default function Field() {
     await updateData(['chats', id || chat.id], { lastMessage: message });
 
     await addData(['chats', id || chat.id, 'messages'], message);
-    setText('');
-    setFiles([]);
+
     scrollDown();
   }
 

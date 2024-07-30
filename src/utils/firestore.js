@@ -59,7 +59,6 @@ const getQuery = (path, queries) => {
   if (!path.length % 2) {
     return query(doc(db, ...path), ...constraints);
   }
-
   return query(collection(db, ...path), ...constraints);
 };
 
@@ -84,12 +83,25 @@ export async function getDatas(path, queries, options = {}) {
   try {
     const q = getQuery(path, queries);
     const querySnapshot = await getDocs(q);
+
+    const result = {};
     if (options.getDoc) {
-      return querySnapshot.docs;
+      result.data = querySnapshot.docs;
+    } else {
+      if (options.id) {
+        result.data = querySnapshot.docs.map(doc => {
+          return { id: doc.id, ...doc.data() };
+        });
+      } else {
+        result.data = querySnapshot.docs.map(doc => {
+          return doc.data();
+        });
+      }
     }
-    const result = querySnapshot.docs.map(doc => {
-      return doc.data();
-    });
+
+    if (options.last) {
+      result.last = querySnapshot.docs[querySnapshot.docs.length - 1];
+    }
 
     return result;
   } catch (error) {
@@ -114,9 +126,8 @@ export async function updateData(path, updateBody, queries) {
   if (queries) {
     const batch = writeBatch(db);
 
-    const datas = await getDatas(path, queries, { getDoc: true });
-    datas.forEach(async data => {
-      // await updateDoc(data.ref, updateBody);
+    const { data } = await getDatas(path, queries, { getDoc: true });
+    data.forEach(async data => {
       batch.update(data.ref, updateBody);
     });
 

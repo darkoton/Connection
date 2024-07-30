@@ -28,15 +28,18 @@ export default function Friends() {
   useEffect(() => {
     async function fetchInvitations() {
       setInvitations(
-        await getDatas(['users'], {
-          wheres: [['uid', 'in', user.invitations]],
-        }),
+        (
+          await getDatas(['users'], {
+            wheres: [['uid', 'in', user.invitations]],
+          })
+        ).data,
       );
     }
 
     async function fetchFriends() {
       setFriends(
-        await getDatas(['users'], { wheres: [['uid', 'in', user.friends]] }),
+        (await getDatas(['users'], { wheres: [['uid', 'in', user.friends]] }))
+          .data,
       );
     }
 
@@ -114,7 +117,7 @@ export default function Friends() {
             },
           ],
         })
-      )[0];
+      ).data[0];
       setChat(chat);
       setChatUser(friend);
 
