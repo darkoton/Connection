@@ -16,30 +16,29 @@ Friend.propTypes = {
 
 export default function Friend({ invite, user, onAccept, onReject, ...props }) {
   return (
-    <FriendStyled invite={invite} {...props}>
-      <Left>
-        <Avatar user={user} />
-        <Username>{user.displayName}</Username>
-      </Left>
+    <FriendBody invite={invite}>
+      <FriendStyled {...props}>
+        <Left>
+          <Avatar user={user} />
+          <Username>{user.displayName}</Username>
+        </Left>
 
-      {invite && (
-        <Invite>
-          <Accept onClick={onAccept}>
-            <CheckIcon sx={Icon} />
-          </Accept>
-          <Reject onClick={onReject}>
-            <ClearIcon sx={Icon} />
-          </Reject>
-        </Invite>
-      )}
-    </FriendStyled>
+        {invite && (
+          <Invite>
+            <Accept onClick={onAccept}>
+              <CheckIcon sx={Icon} />
+            </Accept>
+            <Reject onClick={onReject}>
+              <ClearIcon sx={Icon} />
+            </Reject>
+          </Invite>
+        )}
+      </FriendStyled>
+    </FriendBody>
   );
 }
 
-const FriendStyled = styled(ListItem)`
-  display: flex;
-  justify-content: space-between;
-  column-gap: 10px;
+const FriendBody = styled.div`
   ${({ invite }) =>
     !invite &&
     `@media (any-hover:hover){
@@ -51,6 +50,12 @@ const FriendStyled = styled(ListItem)`
     background:#293248;
   }
   }`}
+`;
+
+const FriendStyled = styled(ListItem)`
+  display: flex;
+  justify-content: space-between;
+  column-gap: 10px;
 `;
 
 const Left = styled.div`

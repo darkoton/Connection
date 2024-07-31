@@ -26,10 +26,12 @@ export default function Chats() {
       ['chats'],
       snapshot => {
         const changes = snapshot.docChanges();
-
         if (!changes.length) {
           setNoChats(true);
+          firstLoad = false;
           return;
+        } else {
+          setNoChats(false);
         }
 
         if (firstLoad) {
@@ -94,7 +96,6 @@ export default function Chats() {
           },
           { last: true },
         );
-        console.log([...chats, ...data]);
         setChats([...chats, ...data]);
 
         LastDocRef.current = last;
@@ -122,19 +123,19 @@ export default function Chats() {
   };
   return (
     <>
-      {!noChats ? (
-        <ListStyled ref={listRef}>
-          {chats.map(chat => (
+      <ListStyled ref={listRef}>
+        {!noChats ? (
+          chats.map(chat => (
             <ChatsListItem
               onClick={selectChat(chat)}
               chat={chat}
               key={chat.id}
             />
-          ))}
-        </ListStyled>
-      ) : (
-        <Empty>No chats</Empty>
-      )}
+          ))
+        ) : (
+          <Empty>No chats</Empty>
+        )}
+      </ListStyled>
     </>
   );
 }

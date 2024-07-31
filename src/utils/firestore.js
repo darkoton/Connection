@@ -9,6 +9,7 @@ import {
   query,
   where,
   updateDoc,
+  deleteDoc,
   or,
   onSnapshot,
   writeBatch,
@@ -123,7 +124,7 @@ export async function getData(path, options = {}) {
 }
 
 export async function updateData(path, updateBody, queries) {
-  if (queries) {
+  if (queries && (path.length % 3 || path.length == 1)) {
     const batch = writeBatch(db);
 
     const { data } = await getDatas(path, queries, { getDoc: true });
@@ -140,6 +141,27 @@ export async function updateData(path, updateBody, queries) {
   } else {
     await updateDoc(doc(db, ...path), updateBody);
     return await getData(path);
+  }
+}
+
+export async function deleteData(path, queries) {
+  if (queries && (path.length % 3 || path.length == 1)) {
+    const batch = writeBatch(db);
+
+    const { data } = await getDatas(path, queries, { getDoc: true });
+    data.forEach(async data => {
+      batch.delete(data.ref);
+    });
+
+    await batch.commit();
+
+    return {
+      type: 'success',
+      message: 'Delete is complete',
+    };
+  } else {
+    await deleteDoc(doc(db, ...path));
+    return null;
   }
 }
 

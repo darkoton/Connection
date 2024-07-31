@@ -6,13 +6,37 @@ import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@/components/User/Avatar';
 import { List, ListItem } from '@mui/material';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import BackHandOutlinedIcon from '@mui/icons-material/BackHandOutlined';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import useChatStore from '@/stores/chat';
 import useUiStore from '@/stores/ui';
+import useUserStore from '@/stores/user';
+import { updateData, deleteData } from '@/utils/firestore';
+import { arrayRemove } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserSideBar() {
-  const { user } = useChatStore();
+  const { user: chatUser, chat, setUser } = useChatStore();
   const { setUserSidebar } = useUiStore();
+  const { user } = useUserStore();
+  const navigate = useNavigate();
+
+  async function removeFriend() {
+    await updateData(['users', user.uid], {
+      friends: arrayRemove(chatUser.uid),
+    });
+
+    await updateData(['users', chatUser.uid], {
+      friends: arrayRemove(user.uid),
+    });
+
+    if (chat) {
+      await deleteData(['chats', chat.id]);
+    }
+
+    setUser(null);
+    navigate('/');
+  }
+
   return (
     <Aside>
       <Header>
@@ -20,9 +44,9 @@ export default function UserSideBar() {
         <Close onClick={() => setUserSidebar(false)} />
       </Header>
       <User>
-        <Avatar current size={70} user={user} />
+        <Avatar current size={70} user={chatUser} />
         <UserInfo>
-          <Username>{user.displayName}</Username>
+          <Username>{chatUser.displayName}</Username>
           <Status>Is only</Status>
         </UserInfo>
       </User>
@@ -36,10 +60,10 @@ export default function UserSideBar() {
           <ListItemRight></ListItemRight>
         </ListItemStyled>
 
-        <RedItem>
+        <RedItem onClick={removeFriend}>
           <ListItemLeft>
-            <BackHandOutlinedIcon css={Icon} />
-            <span>Block</span>
+            <PersonRemoveIcon css={Icon} />
+            <span>Remove from friends</span>
           </ListItemLeft>
           <ListItemRight></ListItemRight>
         </RedItem>

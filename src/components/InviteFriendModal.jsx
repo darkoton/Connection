@@ -50,7 +50,7 @@ export default function InviteFriendModal({ onClose, open }) {
           {
             invitations: arrayUnion(userStore.user.uid),
           },
-          [['tag', '==', tag.trim()]],
+          { wheres: [['tag', '==', tag.trim()]] },
         );
       }
 

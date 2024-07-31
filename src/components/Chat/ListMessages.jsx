@@ -70,7 +70,7 @@ export default function ListMessages() {
     return () => {
       list.removeEventListener('scroll', scrollLoadHandle);
     };
-  }, [chat.id, lastMessageDoc, messages, setMessages]);
+  }, [chat, lastMessageDoc, messages, setMessages, setLastMessageDoc]);
 
   return (
     <>
