@@ -98,20 +98,22 @@ export default function Field() {
     setText('');
     setFiles([]);
 
-    const message = {
-      text,
-      date: Timestamp.fromDate(new Date()),
-      check: false,
-      userUid: user.uid,
-      media: urls,
-      imgs: imageUrls,
-    };
+    for (let index = 1; index < 101; index++) {
+      const message = {
+        text: index,
+        date: Timestamp.fromDate(new Date()),
+        check: false,
+        userUid: user.uid,
+        media: urls,
+        imgs: imageUrls,
+      };
 
-    await updateData(['chats', id || chat.id], { lastMessage: message });
+      await updateData(['chats', id || chat.id], { lastMessage: message });
 
-    await addData(['chats', id || chat.id, 'messages'], message);
+      await addData(['chats', id || chat.id, 'messages'], message);
 
-    scrollDown();
+      scrollDown();
+    }
   }
 
   function getImgLink(file) {
