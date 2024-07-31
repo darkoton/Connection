@@ -2,19 +2,29 @@ import styled from '@emotion/styled';
 import ThreePIcon from '@mui/icons-material/ThreeP';
 import GroupsIcon from '@mui/icons-material/Groups';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { css } from '@emotion/react';
 import vars from '@/assets/style/modules/vars';
 import Menu from '@/components/Sidebar/Menu';
 import { useState } from 'react';
 import useUiStore from '@/stores/ui';
+import Divider from '@/components/ui/Divider';
+import useUserStore from '@/stores/user';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const { logOut: logOutUser } = useUserStore();
   const { setChatList } = useUiStore();
+  const navigate = useNavigate();
 
   const menuToggle = v => () => {
     setMenuOpen(v);
+  };
+
+  const logOut = () => {
+    logOutUser();
+    navigate('/authentication');
   };
 
   return (
@@ -28,6 +38,10 @@ export default function Navigation() {
       </Button>
       <Button onClick={() => setChatList(false)}>
         <GroupsIcon />
+      </Button>
+      <Divider />
+      <Button onClick={logOut}>
+        <LogoutIcon />
       </Button>
     </Aside>
   );

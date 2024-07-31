@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import Home from '@/routes/home';
-import ErrorPage from '@/routes/error';
+import ErrorPage from '@/routes/error/error';
 import Auth from '@/routes/auth';
 import Chat from '@/components/Chat/Chat';
 

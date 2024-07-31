@@ -157,16 +157,15 @@ export async function signOut() {
 
 export async function googleAuth(action) {
   try {
+    console.log(action);
     const result = await signInWithPopup(auth, provider);
-
     const user = result.user;
     let userInfo = await getData(['users', user.uid]);
+    console.log(userInfo);
     // if sign up
     if (!userInfo) {
       createUser(user);
       saveUser(await getData(['users', user.uid]));
-    } else {
-      return;
     }
 
     action();
