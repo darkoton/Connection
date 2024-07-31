@@ -99,7 +99,7 @@ export default function Field() {
     setFiles([]);
 
     const message = {
-      text: index,
+      text,
       date: Timestamp.fromDate(new Date()),
       check: false,
       userUid: user.uid,

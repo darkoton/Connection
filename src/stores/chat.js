@@ -62,7 +62,7 @@ const useChatStore = create((set, get) => ({
             state.setMessages(
               changes.reverse().map(m => ({ id: m.doc.id, ...m.doc.data() })),
             );
-            state.setLastMessageDoc(changes[0].doc);
+            state.setLastMessageDoc(changes[0] ? changes[0].doc : null);
             return;
           }
 
