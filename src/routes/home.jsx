@@ -34,7 +34,7 @@ export function Logo(props) {
   );
 }
 
-useGLTF.preload('/logo2.glb');
+useGLTF.preload('/logo.glb');
 
 export default function Home() {
   const navigate = useNavigate();
