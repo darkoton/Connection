@@ -1,16 +1,17 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import Home from '@/routes/home';
+import App from '@/routes/app';
 import ErrorPage from '@/routes/error/error';
 import Auth from '@/routes/auth';
 import Chat from '@/components/Chat/Chat';
 import ChatEmpty from '@/components/Chat/Empty';
+import Home from '@/routes/Home';
 
 import chatLoader from '@/router/chatLoader';
 const routes = [
   {
     path: '/',
-    element: <Home />,
+    element: <App />,
     children: [
       {
         path: '/',
@@ -31,6 +32,10 @@ const routes = [
   {
     path: 'authentication',
     element: <Auth />,
+  },
+  {
+    path: 'home',
+    element: <Home />,
   },
 ];
 
