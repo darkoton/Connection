@@ -11,7 +11,7 @@ import { Suspense, useRef } from 'react';
 import logoImg from '@/assets/img/logo.png';
 
 export function Logo(props) {
-  const { nodes, materials } = useGLTF('/models/logo.glb');
+  const { nodes, materials } = useGLTF('/Connection/models/logo.glb');
   const logoRef = useRef(null);
 
   useFrame((state, delta) => {
@@ -34,7 +34,7 @@ export function Logo(props) {
   );
 }
 
-useGLTF.preload('/logo.glb');
+useGLTF.preload('/Connection/models/logo.glb');
 
 export default function Home() {
   const navigate = useNavigate();
