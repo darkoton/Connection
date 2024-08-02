@@ -4,7 +4,7 @@ import * as mixins from '@/assets/style/modules/mixins';
 import vars from '@/assets/style/modules/vars';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import SentimentSatisfiedOutlinedIcon from '@mui/icons-material/SentimentSatisfiedOutlined';
-import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
+// import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
 import { useState, useRef } from 'react';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import EmojiPicker from 'emoji-picker-react';
@@ -97,23 +97,20 @@ export default function Field() {
 
     setText('');
     setFiles([]);
+    const message = {
+      text,
+      date: Timestamp.fromDate(new Date()),
+      check: false,
+      userUid: user.uid,
+      media: urls,
+      imgs: imageUrls,
+    };
 
-    for (let index = 1; index < 101; index++) {
-      const message = {
-        text: index,
-        date: Timestamp.fromDate(new Date()),
-        check: false,
-        userUid: user.uid,
-        media: urls,
-        imgs: imageUrls,
-      };
+    await updateData(['chats', id || chat.id], { lastMessage: message });
 
-      await updateData(['chats', id || chat.id], { lastMessage: message });
+    await addData(['chats', id || chat.id, 'messages'], message);
 
-      await addData(['chats', id || chat.id, 'messages'], message);
-
-      scrollDown();
-    }
+    scrollDown();
   }
 
   function getImgLink(file) {
@@ -196,7 +193,7 @@ export default function Field() {
             </EmojiPickerBody>
           </EmojiBody>
 
-          {text || files.length ? <Send onClick={send} /> : <Mic />}
+          <Send onClick={send} disabled={!(text || files.length)} />
         </Actions>
       </Main>
     </Body>
@@ -244,12 +241,17 @@ const Emoji = styled(SentimentSatisfiedOutlinedIcon)`
   ${Icon}
 `;
 
-const Mic = styled(MicNoneOutlinedIcon)`
-  ${Icon}
-`;
+// const Mic = styled(MicNoneOutlinedIcon)`
+//   ${Icon}
+// `;
 
 const Send = styled(SendOutlinedIcon)`
   ${Icon}
+
+  &[disabled] {
+    color: #838383;
+    pointer-events: none;
+  }
 `;
 
 const Input = styled(TextField)`

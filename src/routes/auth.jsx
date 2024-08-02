@@ -14,4 +14,5 @@ const Page = styled.div`
   justify-content: center;
   align-items: center;
   flex: 1 1 auto;
+  padding: 0 10px;
 `;

@@ -208,7 +208,7 @@ const GoogleAuthButton = styled.button`
 `;
 
 const GoogleText = styled.span`
-  font-size: 18px;
+  ${mixins.adaptivValue('font-size', 18, 16, 1)}
 `;
 
 const GoogleAuth = styled.img`

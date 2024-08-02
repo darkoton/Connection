@@ -38,6 +38,7 @@ export default function Menu({ open, toggle }) {
             background: 'red',
           },
         }}
+        swipeAreaWidth={5}
         open={open}
         anchor="left"
         onOpen={toggle(true)}

@@ -7,9 +7,16 @@ UserAvatar.propTypes = {
   user: propTypes.object,
   size: propTypes.number,
   current: propTypes.bool,
+  adaptiv: propTypes.bool,
 };
 
-export default function UserAvatar({ user, current, size = 60, ...props }) {
+export default function UserAvatar({
+  user,
+  current,
+  size = 60,
+  adaptiv = false,
+  ...props
+}) {
   const { user: currentUser } = useUserStore();
 
   function stringToColor(string) {
@@ -35,8 +42,13 @@ export default function UserAvatar({ user, current, size = 60, ...props }) {
       sx: {
         bgcolor: stringToColor(name),
         ...props.sx,
-        width: size,
-        height: size,
+        width: adaptiv
+          ? `calc(${size * 0.75 + 'px'} + ${size - size * 0.75} * ((100vw - 320px) / ${1920 - 320}))`
+          : size,
+        height: adaptiv
+          ? `calc(${size * 0.75 + 'px'} + ${size - size * 0.75} * ((100vw - 320px) / ${1920 - 320}))`
+          : size,
+        adaptiv,
       },
       children: `${name
         .split(' ')

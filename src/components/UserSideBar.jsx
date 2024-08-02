@@ -5,7 +5,6 @@ import * as mixins from '@/assets/style/modules/mixins';
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@/components/User/Avatar';
 import { List, ListItem } from '@mui/material';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import useChatStore from '@/stores/chat';
 import useUiStore from '@/stores/ui';
@@ -38,44 +37,60 @@ export default function UserSideBar() {
   }
 
   return (
-    <Aside>
-      <Header>
-        <Title>Information</Title>
-        <Close onClick={() => setUserSidebar(false)} />
-      </Header>
-      <User>
-        <Avatar current size={70} user={chatUser} />
-        <UserInfo>
-          <Username>{chatUser.displayName}</Username>
-          <Status>Is only</Status>
-        </UserInfo>
-      </User>
+    <AsideBody>
+      <Backdrop onClick={() => setUserSidebar(false)} />
+      <Aside>
+        <Header>
+          <Title>Information</Title>
+          <Close onClick={() => setUserSidebar(false)} />
+        </Header>
+        <User>
+          <Avatar current size={70} user={chatUser} />
+          <UserInfo>
+            <Username>{chatUser.displayName}</Username>
+            {/* <Status>Is only</Status> */}
+          </UserInfo>
+        </User>
+        <ListStyled>
+          {/* <ListItemStyled>
+            <ListItemLeft>
+              <NotificationsNoneIcon css={Icon} />
+              <span>Notification</span>
+            </ListItemLeft>
+            <ListItemRight></ListItemRight>
+          </ListItemStyled> */}
 
-      <ListStyled>
-        <ListItemStyled>
-          <ListItemLeft>
-            <NotificationsNoneIcon css={Icon} />
-            <span>Notification</span>
-          </ListItemLeft>
-          <ListItemRight></ListItemRight>
-        </ListItemStyled>
-
-        <RedItem onClick={removeFriend}>
-          <ListItemLeft>
-            <PersonRemoveIcon css={Icon} />
-            <span>Remove from friends</span>
-          </ListItemLeft>
-          <ListItemRight></ListItemRight>
-        </RedItem>
-      </ListStyled>
-    </Aside>
+          <RedItem onClick={removeFriend}>
+            <ListItemLeft>
+              <PersonRemoveIcon css={Icon} />
+              <span>Remove from friends</span>
+            </ListItemLeft>
+            <ListItemRight></ListItemRight>
+          </RedItem>
+        </ListStyled>
+      </Aside>
+    </AsideBody>
   );
 }
+
+const AsideBody = styled.div`
+  @media (max-width: 1140px) {
+    position: absolute;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 5px;
+  }
+`;
 
 const Aside = styled.aside`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   max-width: 350px;
   background-color: ${vars.$colorChat};
   ${mixins.adaptivValue('padding', 20, 15, 1)}
@@ -83,6 +98,24 @@ const Aside = styled.aside`
 
   & * {
     user-select: none;
+  }
+
+  @media (max-width: 1140px) {
+    height: auto;
+  }
+`;
+
+const Backdrop = styled.div`
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+  @media (max-width: 1140px) {
+    display: block;
   }
 `;
 
@@ -134,10 +167,10 @@ const Username = styled.span`
   white-space: nowrap;
 `;
 
-const Status = styled.span`
-  color: ${vars.$colorMain};
-  ${mixins.adaptivValue('font-size', 18, 16, 1)}
-`;
+// const Status = styled.span`
+//   color: ${vars.$colorMain};
+//   ${mixins.adaptivValue('font-size', 18, 16, 1)}
+// `;
 
 const ListStyled = styled(List)`
   display: flex;

@@ -7,10 +7,10 @@ import Friends from '@/components/Sidebar/Friends';
 import useUiStore from '@/stores/ui';
 
 export default function Sidebar() {
-  const { chatList } = useUiStore();
+  const { chatList, sidebar } = useUiStore();
 
   return (
-    <Aside>
+    <Aside sidebar={sidebar}>
       <Navigation />
       <Body>
         <Header />
@@ -21,14 +21,20 @@ export default function Sidebar() {
 }
 
 const Aside = styled.aside`
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   background: ${vars.$colorAside};
   display: flex;
   user-select: none;
+  @media (max-width: 960px) {
+    max-width: 100%;
+    ${({ sidebar }) => !sidebar && 'display:none;'}
+  }
 `;
 
 const Body = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  width: 100%;
 `;

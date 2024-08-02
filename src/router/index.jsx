@@ -4,6 +4,7 @@ import Home from '@/routes/home';
 import ErrorPage from '@/routes/error/error';
 import Auth from '@/routes/auth';
 import Chat from '@/components/Chat/Chat';
+import ChatEmpty from '@/components/Chat/Empty';
 
 import chatLoader from '@/router/chatLoader';
 const routes = [
@@ -11,6 +12,10 @@ const routes = [
     path: '/',
     element: <Home />,
     children: [
+      {
+        path: '/',
+        element: <ChatEmpty />,
+      },
       {
         path: '/chat/:id',
         loader: chatLoader,

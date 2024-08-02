@@ -116,9 +116,6 @@ export async function getData(path, options = {}) {
   if (options.getDoc) {
     return querySnapshot.docs;
   }
-  // querySnapshot.forEach(doc => {
-  //   console.log(`${doc.id} => ${doc.data()}`);
-  // });
 
   return querySnapshot.data();
 }

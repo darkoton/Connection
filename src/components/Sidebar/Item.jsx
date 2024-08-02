@@ -21,7 +21,12 @@ export default function ChatItem({ chat, ...props }) {
 
   return (
     <Body {...props}>
-      <AvatarStyled user={user.current} size={60} current alt="Travis Howard" />
+      <AvatarStyled
+        user={user.current}
+        size={60}
+        adaptiv
+        alt={user.current.displayName}
+      />
 
       <Info>
         <Left>
@@ -53,6 +58,7 @@ const Body = styled(ListItem)`
   align-items: center;
   width: 100%;
   ${mixins.adaptivValue('column-gap', 15, 10, 1)}
+  ${mixins.adaptivIndent('padding', 8, 8, 16, 8, 1)}
 
   @media (any-hover:hover) {
     & {
@@ -92,6 +98,9 @@ const Username = styled.span`
 
 const Message = styled.span`
   color: ${vars.$colorMain};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Right = styled.div`

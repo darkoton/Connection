@@ -7,14 +7,13 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 
 export default function Main() {
   const { userSidebar } = useUiStore();
-  const { user: chatUse } = useChatStore();
+  const { user: chatUser } = useChatStore();
   return (
     <ProtectedRoute>
       <div className="app">
         <Sidebar />
         <Outlet />
-
-        {userSidebar && chatUse && <UserSideBar />}
+        {userSidebar && chatUser && <UserSideBar />}
       </div>
     </ProtectedRoute>
   );

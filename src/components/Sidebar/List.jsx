@@ -79,7 +79,7 @@ export default function Chats() {
       if (
         LastDocRef.current &&
         !isLoad.current &&
-        scrollTop + target.offsetHeight >= target.scrollHeight - 150
+        scrollTop + target.offsetHeight >= target.scrollHeight - 350
       ) {
         isLoad.current = true;
 
@@ -112,6 +112,7 @@ export default function Chats() {
 
   const selectChat = chat => () => {
     if (currentChat?.id == chat.id) {
+      setChat(chat);
       return;
     }
 

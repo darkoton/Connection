@@ -11,21 +11,27 @@ import useUiStore from '@/stores/ui';
 import Divider from '@/components/ui/Divider';
 import useUserStore from '@/stores/user';
 import { useNavigate } from 'react-router-dom';
+import * as mixins from '@/assets/style/modules/mixins';
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { logOut: logOutUser } = useUserStore();
-  const { setChatList } = useUiStore();
+  const { setChatList, setSidebar } = useUiStore();
   const navigate = useNavigate();
 
   const menuToggle = v => () => {
     setMenuOpen(v);
   };
 
-  const logOut = () => {
+  function logOut() {
     logOutUser();
     navigate('/authentication');
-  };
+  }
+
+  function navigatoTo(action) {
+    action();
+    setSidebar(true);
+  }
 
   return (
     <Aside>
@@ -33,10 +39,10 @@ export default function Navigation() {
       <Button onClick={menuToggle(true)}>
         <MenuIcon />
       </Button>
-      <Button onClick={() => setChatList(true)}>
+      <Button onClick={() => navigatoTo(() => setChatList(true))}>
         <ThreePIcon />
       </Button>
-      <Button onClick={() => setChatList(false)}>
+      <Button onClick={() => navigatoTo(() => setChatList(false))}>
         <GroupsIcon />
       </Button>
       <Divider />
@@ -51,7 +57,8 @@ const Aside = styled.aside`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5px 10px;
+  ${mixins.adaptivIndent('padding', 5, 0, 10, 6, 1)}
+
   row-gap: 10px;
   background: color-mix(in srgb, ${vars.$colorAside}, #111);
 `;

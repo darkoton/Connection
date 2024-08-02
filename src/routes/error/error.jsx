@@ -1,4 +1,4 @@
-import '@/routes/error/error.css';
+import '@/routes/error/error.scss';
 import { useRouteError } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 

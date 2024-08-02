@@ -30,6 +30,7 @@ export default function Message({ data, showAvatar = true }) {
           size={45}
           user={user.uid != data.userUid ? chatUser : user}
           alt="avatar"
+          adaptiv
         />
       )}
       <MessageMain blue={user.uid == data.userUid} noAvatar={!showAvatar}>
@@ -127,8 +128,7 @@ const Body = styled(ListItem)`
   align-items: flex-end;
   width: 100%;
   max-width: 60%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  ${mixins.adaptivIndent('padding', 4, 4, 16, 4, 1)}
 `;
 
 const MessageMain = styled.div`
@@ -141,7 +141,7 @@ const MessageMain = styled.div`
   display: flex;
   align-items: flex-end;
   color: #000;
-  ${mixins.adaptivValue('margin-left', 20, 10, 1)}
+  ${mixins.adaptivValue('margin-left', 20, 15, 1)}
   ${mixins.adaptivValue('font-size', 17, 14, 1)} /* ${props =>
     props.noAvatar && mixins.adaptivValue('margin-left', 70, 60, 1)} */
     ${props => props.noAvatar && 'margin-left: 60px !important;'}
