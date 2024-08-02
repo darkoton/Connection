@@ -5,7 +5,7 @@ import ErrorPage from '@/routes/error/error';
 import Auth from '@/routes/auth';
 import Chat from '@/components/Chat/Chat';
 import ChatEmpty from '@/components/Chat/Empty';
-import Home from '@/routes/Home';
+import Home from '@/routes/home';
 
 import chatLoader from '@/router/chatLoader';
 const routes = [
