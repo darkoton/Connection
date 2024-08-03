@@ -174,6 +174,7 @@ const MessageText = styled.pre`
   font-size: 16px;
   padding: 7px 10px;
   font-family: 'Roboto';
+  white-space: pre-line;
 `;
 
 const MessageImg = styled.img`

@@ -5,7 +5,6 @@ import path from 'path';
 
 const __dirname = path.resolve();
 
-generateFavicon();
 export default async function generateFavicon() {
   console.log('Generate favicons...');
 

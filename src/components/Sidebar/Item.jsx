@@ -31,7 +31,10 @@ export default function ChatItem({ chat, ...props }) {
       <Info>
         <Left>
           <Username>{user.current.displayName}</Username>
-          <Message>{chat.lastMessage.text}</Message>
+          <Message>
+            {(!!chat.lastMessage.imgs.length && 'image') ||
+              chat.lastMessage.text}
+          </Message>
         </Left>
         <Right>
           <Time>
@@ -43,11 +46,11 @@ export default function ChatItem({ chat, ...props }) {
               .join(':')}
           </Time>
 
-          {chat.lastMessage.check ? (
+          {/* {chat.lastMessage.check ? (
             <Check as={DoneAllIcon} />
           ) : (
             <Check as={DoneIcon} />
-          )}
+          )} */}
         </Right>
       </Info>
     </Body>
