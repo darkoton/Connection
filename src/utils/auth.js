@@ -99,7 +99,9 @@ const createUser = info => {
 const saveUser = user => {
   const setUser = useUserStore.getState().setUser;
   setUser(user);
-  localStorage.setItem('uid', user.uid);
+  if (user) {
+    localStorage.setItem('uid', user.uid);
+  }
 };
 
 export async function signUp({ email, password, confirmPassword }, action) {
@@ -180,11 +182,10 @@ onAuthStateChanged(auth, async user => {
       if (userInfo) {
         saveUser(userInfo);
       } else {
-        return;
+        saveUser(null);
       }
     } else {
-      useUserStore.getState().setUser(user);
-      return;
+      saveUser(null);
     }
   } catch (error) {
     console.error(error);
