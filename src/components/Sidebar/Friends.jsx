@@ -42,7 +42,6 @@ export default function Friends() {
           .data,
       );
     }
-    console.log(user);
 
     if (user.invitations.length) {
       fetchInvitations();
