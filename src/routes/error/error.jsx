@@ -26,7 +26,7 @@ export default function ErrorPage() {
               go back
             </span>{' '}
             or{' '}
-            <span className="link" onClick={() => navigate('/')}>
+            <span className="link" onClick={() => navigate('/app')}>
               return to the homepage
             </span>
             .

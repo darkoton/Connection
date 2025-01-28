@@ -26,6 +26,7 @@ const ChatStyled = styled.div`
   flex: 1 1 auto;
   overflow: hidden;
   background: #161628;
+  z-index: 10;
 `;
 
 const Messages = styled(ListMessages)`

@@ -18,7 +18,7 @@ export default function Header() {
     setChat(null);
     setUser(null);
     setSidebar(true);
-    navigate('/');
+    navigate('/app');
   }
 
   return (

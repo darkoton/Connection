@@ -33,7 +33,7 @@ export default function UserSideBar() {
     }
 
     setUser(null);
-    navigate('/');
+    navigate('/app');
   }
 
   return (

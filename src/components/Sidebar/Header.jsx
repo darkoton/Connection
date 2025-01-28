@@ -74,9 +74,9 @@ export default function SideHeader() {
       setUser(friend);
 
       if (chat) {
-        navigate(`/chat/${chat.id}`);
+        navigate(`/app/chat/${chat.id}`);
       } else {
-        navigate(`/friend/${friend.uid}`);
+        navigate(`/app/friend/${friend.uid}`);
       }
     };
   }

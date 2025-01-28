@@ -37,7 +37,7 @@ export default function Form() {
         email,
         password,
       },
-      () => navigate('/'),
+      () => navigate('/app'),
     );
     if (data && data.type == 'error') {
       setErrors(data.errors);
@@ -53,7 +53,7 @@ export default function Form() {
         password,
         confirmPassword,
       },
-      () => navigate('/'),
+      () => navigate('/app'),
     );
 
     if (data && data.type == 'error') {
@@ -62,7 +62,7 @@ export default function Form() {
   }
 
   function google() {
-    googleAuth(() => navigate('/'));
+    googleAuth(() => navigate('/app'));
   }
 
   // console.log(errors);

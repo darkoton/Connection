@@ -42,6 +42,7 @@ export default function Friends() {
           .data,
       );
     }
+    console.log(user);
 
     if (user.invitations.length) {
       fetchInvitations();
@@ -50,7 +51,7 @@ export default function Friends() {
     if (user.friends.length) {
       fetchFriends();
     }
-  }, [user.invitations, user.friends]);
+  }, [user.invitations, user.friends, user]);
 
   useEffect(() => {
     setActiveInviteAccordion(
@@ -122,9 +123,9 @@ export default function Friends() {
       setChatUser(friend);
 
       if (chat) {
-        navigate(`/chat/${chat.id}`);
+        navigate(`/app/chat/${chat.id}`);
       } else {
-        navigate(`/friend/${friend.uid}`);
+        navigate(`/app/friend/${friend.uid}`);
       }
     };
   }

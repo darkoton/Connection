@@ -10,20 +10,20 @@ import Home from '@/routes/home';
 import chatLoader from '@/router/chatLoader';
 const routes = [
   {
-    path: '/',
+    path: 'app',
     element: <App />,
     children: [
       {
-        path: '/',
+        path: '/app',
         element: <ChatEmpty />,
       },
       {
-        path: '/chat/:id',
+        path: '/app/chat/:id',
         loader: chatLoader,
         element: <Chat />,
       },
       {
-        path: '/friend/:id',
+        path: '/app/friend/:id',
         element: <Chat />,
       },
     ],
@@ -34,7 +34,7 @@ const routes = [
     element: <Auth />,
   },
   {
-    path: 'home',
+    path: '',
     element: <Home />,
   },
 ];

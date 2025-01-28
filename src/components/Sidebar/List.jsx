@@ -120,7 +120,7 @@ export default function Chats() {
 
     setChat(chat);
     setUser(chatUser);
-    navigate('/chat/' + chat.id);
+    navigate('/app/chat/' + chat.id);
   };
   return (
     <>
