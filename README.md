@@ -1,4 +1,4 @@
-# React Messenger
+# Сonnection
 
 <p align="center">
     <img src="./public/preview.jpg" alt="React Messenger Preview">
